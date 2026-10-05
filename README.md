@@ -9,7 +9,7 @@ Plataforma: [ioai.artix.tech](https://ioai.artix.tech/) · se desarrolla en para
 
 El curso usa dos lugares en GitHub:
 
-- **Este repositorio** ([github.com/melvinpqbsc/Alto_Rendiento_IA](https://github.com/melvinpqbsc/Alto_Rendiento_IA)), público: cronograma, guía del estudiante, notebooks de clase y enunciados de los trabajos. Lo lees y abres sus notebooks en Colab, pero no guardas nada en él.
+- **Este repositorio** ([github.com/melvinpqbsc/Alto_Rendimiento_IA](https://github.com/melvinpqbsc/Alto_Rendimiento_IA)), público: cronograma, guía del estudiante, notebooks de clase y enunciados de los trabajos. Lo lees y abres sus notebooks en Colab, pero no guardas nada en él.
 - **Tu repositorio de entregas**, `Alto-Rendimiento-IA/entregas-<tu-usuario>`, en la [organización del curso](https://github.com/Alto-Rendimiento-IA): es **privado** (solo lo ven tú y el profesor) y lo usas todo el año. Ahí guardas y entregas tus trabajos.
 
 *Git* es el programa que guarda la historia de cambios de los archivos; *GitHub* es el sitio donde viven los repositorios en línea. Para este curso no necesitas instalar nada: todo se hace desde el navegador con GitHub y Google Colab.
@@ -17,7 +17,7 @@ El curso usa dos lugares en GitHub:
 ### Organización del repositorio
 
 ```
-Alto_Rendiento_IA/
+Alto_Rendimiento_IA/
 ├── README.md                  ← este cronograma
 ├── Guia_del_estudiante.md     ← reglas del curso
 ├── requirements.txt           ← versiones de las librerías (ver Entorno de trabajo)
@@ -41,7 +41,7 @@ Trabaja solo en la carpeta de tu nivel.
 
 ### Clases
 
-Cada notebook de clase tiene arriba un botón **Abrir en Colab**. También puedes abrirlos con *Archivo → Abrir notebook → GitHub* y el repositorio `melvinpqbsc/Alto_Rendiento_IA`. Si quieres conservar tus notas, *Archivo → Guardar una copia en Drive*.
+Cada notebook de clase tiene arriba un botón **Abrir en Colab**. También puedes abrirlos con *Archivo → Abrir notebook → GitHub* y el repositorio `melvinpqbsc/Alto_Rendimiento_IA`. Si quieres conservar tus notas, *Archivo → Guardar una copia en Drive*.
 
 ### Trabajos prácticos
 
@@ -71,7 +71,7 @@ uv run jupyter lab                    # abre Jupyter en el navegador
 
 En Windows con GPU NVIDIA, instala antes PyTorch con soporte CUDA siguiendo [pytorch.org/get-started](https://pytorch.org/get-started/locally/) (versión 2.11.0); sin GPU, los comandos de arriba alcanzan.
 
-**En los dos casos**, en la primera clase ejecuta [`verificar_entorno.ipynb`](verificar_entorno.ipynb) ([abrir en Colab](https://colab.research.google.com/github/melvinpqbsc/Alto_Rendiento_IA/blob/main/verificar_entorno.ipynb)): revisa las versiones, la GPU y entrena un modelo mínimo.
+**En los dos casos**, en la primera clase ejecuta [`verificar_entorno.ipynb`](verificar_entorno.ipynb) ([abrir en Colab](https://colab.research.google.com/github/melvinpqbsc/Alto_Rendimiento_IA/blob/main/verificar_entorno.ipynb)): revisa las versiones, la GPU y entrena un modelo mínimo.
 
 ---
  
