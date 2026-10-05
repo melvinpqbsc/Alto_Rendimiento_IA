@@ -27,7 +27,7 @@ repositorio `{org}/{repo}`, rama `main`, ruta `P01/P01_nombre_del_notebook.ipynb
 
 Al inicio de cada clase el profesor copia este repositorio: lo que esté aquí en ese
 momento es tu entrega. Instrucciones completas en
-https://github.com/melvinpqbsc/Alto_Rendiento_IA#antes-de-empezar-github
+https://github.com/melvinpqbsc/Alto_Rendimiento_IA#antes-de-empezar-github
 """
 
 README_PROYECTO = """# Proyecto: {pareja}

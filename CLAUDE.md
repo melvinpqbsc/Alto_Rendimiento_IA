@@ -40,7 +40,7 @@ File names are snake_case ASCII: no accents, no `ñ`, no spaces, because they en
 ## Every notebook
 
 - **Spanish** for all prose, comments, and plot labels. Code identifiers are in English, following PyTorch/sklearn conventions. The first time a technical term appears, give it in English in italics with a Spanish gloss (*broadcasting*, *accuracy*), as README does. Datasets, APIs, and competition problems stay in English: that friction is part of the training.
-- **Header cell** with: title, level, week number, session type, 3–4 learning objectives, prerequisites, estimated time, compute needs (CPU / GPU T4), and an "Abrir en Colab" badge pointing to `https://colab.research.google.com/github/melvinpqbsc/Alto_Rendiento_IA/blob/main/<path>`.
+- **Header cell** with: title, level, week number, session type, 3–4 learning objectives, prerequisites, estimated time, compute needs (CPU / GPU T4), and an "Abrir en Colab" badge pointing to `https://colab.research.google.com/github/melvinpqbsc/Alto_Rendimiento_IA/blob/main/<path>`.
 - **Fresh-runtime reproducible**: the first code cell holds the `%pip install -q` lines (see Environment), all imports, and a fixed seed. Data comes from torchvision / sklearn / Hugging Face datasets or a stable public URL, with no Drive mounting and no local paths. Size datasets and training so they fit in free Colab: minutes, not hours, unless the README row says otherwise (for example, the 15 min GPU budgets).
 - **Baseline first**: every modelling result is compared against a simple baseline (majority class, linear model, TF-IDF + logistic regression, …).
 
