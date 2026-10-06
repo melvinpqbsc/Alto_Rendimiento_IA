@@ -19,7 +19,7 @@ Course repository for training high-school students toward IOAI 2027 (Singapore,
 
 ```
 Nivel_<Inicial|Intermedio>/
-  clases/semNN_<tema>.ipynb        # NN = README week number, two digits: sem06_pytorch.ipynb
+  clases/semNN_<tema>.ipynb        # NN = README week number, two digits: sem08_pytorch.ipynb
   tareas/<codigo>_<tema>.ipynb     # codes from README: B1, P01…P13, S1, Sprint0…Sprint3
   soluciones/                      # reference solutions, gitignored, local only
   README.md                        # index: add a row for every notebook you create
@@ -32,7 +32,7 @@ File names are snake_case ASCII: no accents, no `ñ`, no spaces, because they en
 ## Writing a notebook
 
 1. **Locate the row.** Find the week/code in README.md: its topic is the scope, its type ([A]/[B]/[C]/[D]) sets the shape (below), and the §3 table lists which syllabus items it must cover.
-2. **Check the prerequisites.** List what earlier weeks taught and use only those tools (for example, no PyTorch before week 6, no `nn.Conv2d` before week 11). Each homework must also be **self-contained**: a student who skipped every earlier homework can still complete it (README §6, expected 30–50% dropout).
+2. **Check the prerequisites.** List what earlier weeks taught and use only those tools (for example, no PyTorch before week 8, no `nn.Conv2d` before week 13). Each homework must also be **self-contained**: a student who skipped every earlier homework can still complete it (README §6, expected 30–50% dropout).
 3. **Build it with `nbformat`** from a Python script in the scratchpad. Hand-edited notebook JSON breaks.
 4. **Verify.** Run `.venv/bin/jupyter nbconvert --to notebook --execute` on class notebooks and on every homework's reference solution. The homework statement itself fails its checks by design. Done means it runs top to bottom with no errors on a fresh kernel. If it needs a GPU or Colab-only features and you can't run it locally, tell the user which cells you could not run.
 5. **Commit with outputs cleared**, then add the row to the level README.

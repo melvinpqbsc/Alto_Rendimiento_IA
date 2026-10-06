@@ -2,7 +2,7 @@
 
 Sep 22, 2026 · @Melvin Poveda
 
-Este es un curso anual de deep learning que empieza el Oct 5, 2026 y termina a fines de junio de 2027. Nos vemos una vez por semana (2 horas), pero la mayor parte del aprendizaje ocurre fuera de clase: esperamos entre 4 y 5 horas semanales de trabajo tuyo.
+Este es un curso anual de deep learning que empieza el Oct 7, 2026 y termina el 30 de junio de 2027. Nos vemos en línea una vez por semana, los miércoles (2 horas), pero la mayor parte del aprendizaje ocurre fuera de clase: esperamos entre 4 y 5 horas semanales de trabajo tuyo.
 
 ## El curso en síntesis
 
@@ -12,14 +12,16 @@ La herramienta central es la plataforma [ioai.artix.tech](https://ioai.artix.tec
 
 | Bloque | Fechas | Tema |
 | --- | --- | --- |
-| 1. Puente | 5 oct – 2 nov | Repaso de Python/NumPy, matemática para deep learning y ML clásico |
-| 2. Redes neuronales y PyTorch | 9 nov – 14 dic | Perceptrón, backpropagation, PyTorch, cómo entrenar bien |
-| Verano | Enero | Trabajo autónomo opcional: ML clásico y Kaggle |
-| 3. Visión por computadora | 1 feb – 29 mar | CNN, transfer learning, detección, segmentación, modelos generativos |
-| 4. Lenguaje, audio, multimodal | 5 abr – 24 may | Embeddings, atención, transformers, LLM, CLIP, Whisper |
-| 5. Preparación final | 31 may – 28 jun | Problemas de ediciones anteriores, proyecto, simulacro de 6 horas |
+| 1. Puente | 7 oct – 4 nov | Repaso de Python/NumPy, datos con pandas, matemática para deep learning y ML clásico |
+| 2. Redes neuronales y PyTorch | 11 nov – 16 dic | Perceptrón, backpropagation, PyTorch, cómo entrenar bien |
+| Receso de fin de año | 17 dic – 2 feb | Trabajo autónomo opcional: ML clásico y Kaggle |
+| 3. Visión por computadora | 3 feb – 24 mar | CNN, transfer learning, detección, segmentación, modelos generativos |
+| 4. Lenguaje, audio, multimodal | 31 mar – 19 may | Embeddings, atención, transformers, LLM, CLIP, Whisper |
+| 5. Preparación final | 26 may – 30 jun | Problemas de ediciones anteriores, proyecto, simulacro de 6 horas |
 
-Fechas que conviene anotar ya: Sprint 1 el 14 de diciembre, propuesta de proyecto el 3 de mayo, presentación del proyecto el 14 de junio y simulacro de 6 horas el 21 de junio (probablemente un sábado).
+Fechas que conviene anotar ya: Sprint 1 el 16 de diciembre, propuesta de proyecto el 28 de abril, presentación del proyecto el 16 de junio y simulacro de 6 horas el 23 de junio (probablemente un sábado cercano).
+
+En el Bloque 1 (Puente), antes de cada clase lees 2 o 3 notebooks en inglés del programa [MÓLÓ](https://mi.versenyportal.hu/en/molo#notebooks). La lista de cada semana está en el [README](README.md#bloque-1-puente-repaso-acelerado-del-contenido-del-nivel-inicial).
 
 ## Cómo funciona cada semana
 
@@ -33,7 +35,7 @@ Después viene uno de cuatro tipos de sesión:
 
 | Tipo | Qué pasa | Qué se espera de ti |
 | --- | --- | --- |
-| Clase | El profesor explica un tema difícil (unas 11 veces en el año) | Venir con la cuota semanal hecha y preguntas |
+| Clase | El profesor explica un tema difícil (unas 16 veces en el año) | Venir con la cuota semanal hecha y preguntas |
 | Laboratorio | Trabajas en la plataforma o en tu notebook; el profesor circula | Traer dudas concretas, ayudar a tus compañeros |
 | Seminario | Un estudiante enseña un tema durante 20 minutos | Si presentas: notebook que funcione. Si escuchas: una pregunta escrita enviada antes |
 | Sprint | Problema cronometrado, evaluado con datos de prueba ocultos | Trabajo individual, sin ayuda externa |
@@ -78,13 +80,12 @@ Si usaste IA en un trabajo, agrega una línea al final diciendo para qué. El pr
 
 Cada notebook se evalúa con cuatro criterios, de 0 a 2 puntos cada uno: **se ejecuta**, **es correcto**, **está justificado** y **está bien comunicado**. Antes de entregar, asígnate tu propio puntaje: aprender a evaluar tu trabajo es parte del curso.
 
-## Antes de la primera clase (Oct 5, 2026)
+## Antes de la primera clase (Oct 7, 2026)
 
 - [ ] Crear una cuenta en [ioai.artix.tech](https://ioai.artix.tech/) y leer la [guía de la plataforma](https://ioai.artix.tech/guide) (5 minutos).
 - [ ] Tener una cuenta de Google y abrir un notebook en [Google Colab](https://colab.research.google.com/) para comprobar que funciona.
 - [ ] Crear una cuenta en [GitHub](https://github.com/), enviarle tu usuario al profesor, aceptar la invitación a tu repositorio de entregas cuando llegue y conectar Colab con GitHub. Instrucciones en [Antes de empezar: GitHub](README.md#antes-de-empezar-github).
-- [ ] Traer una computadora portátil a cada clase, si es posible.
-- [ ] No hacer todavía el test de nivel: lo hacemos juntos en la primera clase.
+- [ ] Tener una computadora con conexión estable a internet para las clases, que son en línea.
 
 ## Si faltas o te atrasas
 
@@ -93,5 +94,5 @@ Ningún trabajo práctico depende de uno anterior, así que siempre puedes reinc
 ## Contacto
 
 - Profesor: @Melvin Poveda
-- Día, horario y aula: por definir
+- Día: miércoles, en línea. Horario y enlace: por definir
 - Canal del grupo: por definir
