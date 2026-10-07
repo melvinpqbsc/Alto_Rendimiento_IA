@@ -23,3 +23,7 @@ datos/
 herramientas/*.csv
 !herramientas/*.ejemplo.csv
 herramientas/recolecciones/
+
+# Videos: el MP4, los cuadros y la caché de la voz se regeneran con videos/motor.py
+.venv-video/
+videos/salida/

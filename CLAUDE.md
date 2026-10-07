@@ -51,6 +51,19 @@ File names are snake_case ASCII: no accents, no `ñ`, no spaces, because they en
 - **[C] seminar**: the students present, so write a scaffold for the presenter: topic outline, the key figure/demo to build, 3 references, and 3 discussion questions for the audience.
 - **[D] sprint**: problem statement, data loading, a working baseline, the submission format, and a local validation split. Delivered like homework, in the student's `entregas` repo under `SprintN/`. The hidden test set lives only in `test_oculto/` (gitignored). Any public commit of it leaks the answers.
 
+## Class videos (`videos/`)
+
+Each class notebook gets a narrated explainer video (Spanish, Ecuadorian voice, ~10–15 min) for students who missed the class or want to review it. A video is a **script** (`videos/guiones/<notebook stem>.py`) rendered by `videos/motor.py`: slides drawn with Pillow, narration from edge-tts (needs internet), and an MP4 with soft subtitles plus an `.srt`, all written to `videos/salida/<stem>/` (gitignored). The env is `.venv-video/` (setup in `videos/requirements.txt`), separate from `.venv` because `.venv` mirrors Colab. `videos/guiones/sem01_herramientas.py` is the model: copy its structure and visual vocabulary. The element API (`Texto`, `Codigo`, `Terminal`, `Caja`, `Flecha`, `Tabla`, `Matriz`, `Grafica`, ...) is documented in `motor.py`.
+
+1. **Read the notebook end to end**, plus its README row. The video covers the same parts in the same order, with the same week numbers, names, and examples (run the notebook's code to get real outputs for `Terminal`).
+2. **Write the script.** A `Seccion` marker per notebook part, an `Escena` per idea, a `Paso` per sentence or two of narration with the elements it reveals. Aim for 50–70 steps.
+   - Teach for a 15-year-old: one idea per scene, a concrete analogy before the definition (commit = a photo of the project, class = a cookie mold), a diagram rather than a text slide wherever the idea has a shape (data flow, array shapes, a timeline).
+   - Narration is spoken Spanish in *tú*: short sentences, numbers and symbols said in words ("x por W transpuesta"), no markup, no hashes or long identifiers read aloud. On screen goes the real code and terms.
+   - "Tu turno" exercises: explain the idea and say "pausa el video"; show only the statement's skeleton. Never show a solution or the answer a check cell verifies (e.g. the parameter count of `net`).
+3. **Check the layout**: `.venv-video/bin/python videos/motor.py <script> --solo-cuadros`, then look at every image in `videos/salida/<stem>/hojas/` (last step of each scene) and at `cuadros/` for steps that replace elements. Done when nothing overlaps, no text runs off its box, and no glyph renders as a box.
+4. **Build and check the voice**: run `motor.py <script>` without flags, then `.venv/bin/python videos/revisar_voz.py <script>`. Whisper is noisy, so look for a technical term mangled across several steps; fix it in `PRONUNCIACION` (motor.py, audio only) or by rephrasing. Sentence-initial English words are read worst: put a Spanish word before them ("Por otro lado, GitHub..."). Rebuilding only synthesizes changed sentences (cached).
+5. **Deliver**: commit the script (and any engine changes); the MP4 stays out of git. Give the user the MP4 path and its length; they upload it (e.g. YouTube, with the `.srt`).
+
 ## Homework (`tareas/`)
 
 - The notebook is a **statement**, never a solution. It holds context and a goal, numbered tasks, `# TODO` cells, and `assert`-based check cells wherever correctness is checkable (shapes, values against a library reference such as micrograd vs `torch.autograd`, attention vs `nn.MultiheadAttention`).
