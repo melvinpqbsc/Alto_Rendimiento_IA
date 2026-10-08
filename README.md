@@ -118,7 +118,7 @@ Objetivo: en 5 sesiones (herramientas + 4 de repaso), asegurar que todos tengan 
 | Sem | Fecha | Sesión | Tipo | Entrega al inicio de la clase |
 |---|---|---|---|---|
 | 1 | **7 oct** | **Inicio: las herramientas del curso.** Qué es la IOAI y cómo funciona el curso. Cuentas (plataforma y GitHub, ver [Antes de empezar: GitHub](#antes-de-empezar-github)), invitación al repositorio privado de entregas, configuración de Colab y `verificar_entorno.ipynb`. **Git y GitHub en la práctica**: repositorio, *commit*, historial; guardar desde Colab un primer notebook en una carpeta de prueba del repositorio de entregas y ver el *commit* en GitHub. **Python orientado a objetos** (*object-oriented programming*): clases, `__init__`, atributos, métodos, herencia y `__call__`; construir una clase `Linear` con un método `forward`, el mismo patrón de `nn.Module` y `Dataset` desde la semana 8. | [A] | — |
-| 2 | 14 oct | **NumPy para tensores + álgebra lineal**: formas (*shapes*), indexación, *broadcasting*, vectorización, `reshape`/`axis` (el modelo mental que PyTorch reutiliza en todo); producto punto, matriz × vector como "una capa", matriz × matriz como un lote (*batch*) que pasa por esa capa. | [A] | Niveles de Python superados en la plataforma |
+| 2 | 14 oct | **NumPy para tensores + álgebra lineal**: formas (*shapes*), indexación, *broadcasting*, vectorización, `reshape`/`axis` (el modelo mental que PyTorch reutiliza en todo); producto punto, matriz × vector como "una capa", matriz × matriz como un lote (*batch*) que pasa por esa capa. | [A] | Niveles de Python superados en la plataforma · **B0: Mi primer modelo** (clases en Python, clasificador de la clase mayoritaria como línea base; corto y guiado) |
 | 3 | 21 oct | **Datos reales: pandas, gráficos y estadística descriptiva.** Laboratorio: cargar un CSV, tipos de columnas, datos faltantes, `groupby`, histogramas y diagramas de dispersión; media, desviación estándar, correlación. Datos estructurados vs no estructurados: una imagen y un texto también terminan siendo arreglos. | [B] | **B1: Ejercicios de NumPy** (vectorizar 6 funciones con bucles, reportar la aceleración) |
 | 4 | 28 oct | **Cálculo y probabilidad para DL**: derivadas parciales, gradiente, regla de la cadena; la pérdida como función de los parámetros; descenso de gradiente a mano; probabilidad → softmax → logaritmo → entropía cruzada. | [A] | Cuota semanal |
 | 5 | 4 nov | **ML clásico en síntesis**: aprendizaje supervisado, entrenamiento/validación/prueba, sobreajuste y sesgo-varianza, validación cruzada, *accuracy* vs precisión/recall/F1, `fit/predict` de sklearn (regresión lineal y logística, kNN, árbol de decisión). Al final se publica el **Sprint 0** (asincrónico, se entrega en la semana 6): limpiar un CSV desordenado, ajustar dos modelos de sklearn, reportar métricas contra una línea base. | [A] | **B2: Descenso de gradiente a mano** (1-D y 2-D, gráfico de contornos, romperlo con una mala tasa de aprendizaje) |
@@ -231,7 +231,7 @@ Un mensaje por semana, no más.
 | Componente | Peso |
 |---|---|
 | Progreso en la plataforma (niveles superados) | 20% |
-| Trabajos prácticos (B1–B3, P1–P13) | 35% |
+| Trabajos prácticos (B0–B3, P1–P13) | 35% |
 | Seminarios presentados | 15% |
 | Sprints + simulacro | 10% |
 | Proyecto | 20% |

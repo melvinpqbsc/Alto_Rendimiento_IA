@@ -20,7 +20,7 @@ Course repository for training high-school students toward IOAI 2027 (Singapore,
 ```
 Nivel_<Inicial|Intermedio>/
   clases/semNN_<tema>.ipynb        # NN = README week number, two digits: sem08_pytorch.ipynb
-  tareas/<codigo>_<tema>.ipynb     # codes from README: B1, P01…P13, S1, Sprint0…Sprint3
+  tareas/<codigo>_<tema>.ipynb     # codes from README: B0…B3, P01…P13, S1, Sprint0…Sprint3
   soluciones/                      # reference solutions, gitignored, local only
   README.md                        # index: add a row for every notebook you create
 ```
