@@ -1,0 +1,24 @@
+Asunto: Empezamos mañana: horario y enlace de las clases de IA
+
+Hola, {nombre}:
+
+Con las respuestas de todos ya elegí el horario. El Programa de Alto Rendimiento en IA empieza mañana, miércoles 7 de octubre.
+
+Horario
+- Día: todos los miércoles, en línea.
+- Hora: {hora} (hora de Ecuador). Cada clase dura 2 horas.
+- Enlace de la reunión (es el mismo para todas las clases): {enlace_reunion}
+- Las clases siguen el calendario de feriados nacionales de Ecuador; ninguno cae en miércoles, así que no hay semanas sin clase en el período regular.
+
+Para la primera clase
+1. Entra al enlace unos minutos antes, con una computadora y conexión estable a internet.
+2. Ten lista tu cuenta de Google y abre un notebook en Google Colab (https://colab.research.google.com/) para comprobar que funciona.
+3. Si todavía no lo hiciste, acepta la invitación a tu repositorio privado de entregas (Alto-Rendimiento-IA/entregas-<tu-usuario>), que te llegó por correo de GitHub. Caduca a los 7 días.
+4. Crea una cuenta en la plataforma https://ioai.artix.tech/ y lee su guía (5 minutos): https://ioai.artix.tech/guide
+
+En la primera clase vemos qué es la IOAI, cómo funciona el curso y las herramientas que vamos a usar todo el año: Colab, Git y GitHub, y Python orientado a objetos.
+
+Toda la información (cronograma, reglas y forma de entrega) está en https://github.com/melvinpqbsc/Alto_Rendimiento_IA. Si tienes cualquier duda, escríbeme por este medio o por WhatsApp al +5521969231922.
+
+¡Nos vemos mañana!
+Melvin Poveda
