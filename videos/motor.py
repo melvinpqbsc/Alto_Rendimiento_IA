@@ -549,6 +549,130 @@ class Grafica(Elemento):
             dibujar_texto(d, x + w / 2, y + h + 30, self.etiqueta, 30, TINTA, self.color, alinear="centro")
 
 
+class _Ejes(Elemento):
+    """Base de Histograma y Dispersion: un panel blanco con ejes, marcas y leyenda en la caja (x, y, w, h)."""
+
+    def _preparar(self, x, y, w, h, rx, ry, marcas_x, marcas_y, etiqueta_x, etiqueta_y, nombres, colores):
+        self.caja, self.rx, self.ry = (x, y, w, h), rx, ry
+        self.marcas_x, self.marcas_y, self.etiqueta_x, self.etiqueta_y = marcas_x, marcas_y, etiqueta_x, etiqueta_y
+        self.nombres, self.colores = nombres, colores
+
+    def _a_pantalla(self, xv, yv):
+        x, y, w, h = self.caja
+        (x0, x1), (y0, y1) = self.rx, self.ry
+        return x + (xv - x0) / (x1 - x0) * w, y + h - (yv - y0) / (y1 - y0) * h
+
+    def _fondo(self, d):
+        x, y, w, h = self.caja
+        d.rounded_rectangle((x - 90, y - 30, x + w + 30, y + h + 100), radius=16, fill="white",
+                            outline=GRIS_CLARO, width=2)
+
+    def _ejes(self, img, d):
+        x, y, w, h = self.caja
+        d.line((x, y + h, x + w, y + h), fill=GRIS, width=3)
+        d.line((x, y, x, y + h), fill=GRIS, width=3)
+        f = fuente("normal", 24)
+        for v in self.marcas_x:
+            px, _ = self._a_pantalla(v, self.ry[0])
+            d.line((px, y + h, px, y + h + 10), fill=GRIS, width=3)
+            d.text((px, y + h + 14), f"{v:g}", font=f, fill=GRIS, anchor="mt")
+        for v in self.marcas_y:
+            _, py = self._a_pantalla(self.rx[0], v)
+            d.line((x - 10, py, x, py), fill=GRIS, width=3)
+            d.text((x - 16, py), f"{v:g}", font=f, fill=GRIS, anchor="rm")
+        if self.etiqueta_x:
+            dibujar_texto(d, x + w / 2, y + h + 48, self.etiqueta_x, 28, TINTA, alinear="centro")
+        if self.etiqueta_y:
+            capa = Image.new("RGBA", (round(h), 50), (0, 0, 0, 0))
+            dibujar_texto(ImageDraw.Draw(capa), h / 2, 4, self.etiqueta_y, 28, TINTA, alinear="centro")
+            capa = capa.rotate(90, expand=True)
+            img.paste(capa, (round(x - 88), round(y)), capa)
+        if self.nombres:
+            lx, ly = x + w - 250, y + 6
+            for nombre, color in zip(self.nombres, self.colores):
+                d.rectangle((lx, ly + 6, lx + 26, ly + 32), fill=color)
+                d.text((lx + 38, ly), nombre, font=fuente("normal", 28), fill=TINTA)
+                ly += 42
+
+
+def _con_transparencia(img, dibujar):
+    """Dibuja con colores RGBA (semitransparentes) sobre img, que es RGB."""
+    capa = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    dibujar(ImageDraw.Draw(capa))
+    img.paste(Image.alpha_composite(img.convert("RGBA"), capa).convert("RGB"))
+
+
+class Histograma(_Ejes):
+    """Barras de conteos sobre los intervalos definidos por bordes (len(bordes) = len(conteos) + 1).
+    series: una lista de conteos por grupo; con varios grupos, las barras se superponen semitransparentes."""
+
+    def __init__(self, x, y, w, h, bordes, series, colores=(GRIS,), nombres=None, ymax=None, marcas_x=(),
+                 marcas_y=(), etiqueta_x=None, etiqueta_y=None, id=None):
+        ymax = ymax or max(max(s) for s in series) * 1.1
+        self._preparar(x, y, w, h, (bordes[0], bordes[-1]), (0, ymax), marcas_x, marcas_y, etiqueta_x, etiqueta_y,
+                       nombres, colores)
+        self.bordes, self.series, self.id = bordes, series, id
+
+    def dibujar(self, img, d):
+        self._fondo(d)
+        alfa = 255 if len(self.series) == 1 else 150
+
+        def barras(dc):
+            for conteos, color in zip(self.series, self.colores):
+                for a, b, n in zip(self.bordes, self.bordes[1:], conteos):
+                    if n:
+                        x0, y0 = self._a_pantalla(a, n)
+                        x1, y1 = self._a_pantalla(b, 0)
+                        dc.rectangle((x0 + 1, y0, x1 - 1, y1), fill=rgb(color) + (alfa,))
+
+        _con_transparencia(img, barras)
+        self._ejes(img, ImageDraw.Draw(img))
+
+
+class Dispersion(_Ejes):
+    """Un punto por par (x, y). series: [(xs, ys)] por grupo, con su color.
+    tendencia=True dibuja la recta de mínimos cuadrados de cada grupo.
+    cuadrantes=True marca las medias (de todos los puntos) y el signo de (x − x̄)(y − ȳ) en cada cuadrante."""
+
+    def __init__(self, x, y, w, h, series, colores=(GRIS,), nombres=None, rx=(0, 1), ry=(0, 1), marcas_x=(),
+                 marcas_y=(), etiqueta_x=None, etiqueta_y=None, tendencia=False, cuadrantes=False, radio=6, id=None):
+        self._preparar(x, y, w, h, rx, ry, marcas_x, marcas_y, etiqueta_x, etiqueta_y, nombres, colores)
+        self.series, self.tendencia, self.cuadrantes, self.radio, self.id = series, tendencia, cuadrantes, radio, id
+
+    def dibujar(self, img, d):
+        self._fondo(d)
+        x, y, w, h = self.caja
+        if self.cuadrantes:
+            xs = np.concatenate([np.asarray(s[0], float) for s in self.series])
+            ys = np.concatenate([np.asarray(s[1], float) for s in self.series])
+            mx, my = self._a_pantalla(xs.mean(), ys.mean())
+            for i in range(0, round(h), 24):
+                d.line((mx, y + i, mx, y + min(i + 12, h)), fill=NARANJA, width=3)
+            for i in range(0, round(w), 24):
+                d.line((x + i, my, x + min(i + 12, w), my), fill=NARANJA, width=3)
+            f = fuente("respaldo_negrita", 64)  # Noto Sans no trae el signo −
+            for sx, sy, signo, color in [(1, -1, "+", VERDE), (-1, 1, "+", VERDE), (-1, -1, "−", ROJO),
+                                         (1, 1, "−", ROJO)]:
+                d.text((mx + sx * w / 4, my + sy * h / 4), signo, font=f, fill=color, anchor="mm")
+        r = self.radio
+
+        def puntos(dc):
+            for (xs, ys), color in zip(self.series, self.colores):
+                for xv, yv in zip(xs, ys):
+                    px, py = self._a_pantalla(xv, yv)
+                    dc.ellipse((px - r, py - r, px + r, py + r), fill=rgb(color) + (190,))
+
+        _con_transparencia(img, puntos)
+        d = ImageDraw.Draw(img)
+        if self.tendencia:
+            for (xs, ys), color in zip(self.series, self.colores):
+                xs, ys = np.asarray(xs, float), np.asarray(ys, float)
+                m, b = np.polyfit(xs, ys, 1)
+                tramo = (xs.min(), xs.max())
+                d.line([self._a_pantalla(v, m * v + b) for v in tramo], fill=mezclar(color, TINTA, 0.3), width=7)
+        self._ejes(img, d)
+
+
 # ------------------------------------------------------------- escenas y pasos
 
 
@@ -672,6 +796,16 @@ PRONUNCIACION = {
     "sum": "som",
     "copy": "cópi",
     "broadcasting": "bródcasting",
+    "NaN": "nan",
+    "unknown": "ánnoun",
+    "Gentoo": "Yéntu",
+    "group by": "grup bái",
+    "Group by": "Grup bái",
+    "unstack": "an-sták",
+    "np where": "ene pe, uér",
+    "read csv": "rid, ce ese ve",
+    "ddof": "de de o efe",
+    "Simpson": "Símpson",
 }
 
 
