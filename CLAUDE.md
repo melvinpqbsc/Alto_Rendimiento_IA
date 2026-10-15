@@ -57,11 +57,26 @@ Each class notebook gets a narrated explainer video (Spanish, Ecuadorian voice, 
 
 1. **Read the notebook end to end**, plus its README row. The video covers the same parts in the same order, with the same week numbers, names, and examples (run the notebook's code to get real outputs for `Terminal`).
 2. **Write the script.** A `Seccion` marker per notebook part, an `Escena` per idea, a `Paso` per sentence or two of narration with the elements it reveals. Aim for 50–70 steps.
-   - Teach for a 15-year-old: one idea per scene, a concrete analogy before the definition (commit = a photo of the project, class = a cookie mold), a diagram rather than a text slide wherever the idea has a shape (data flow, array shapes, a timeline).
+   - **Make it as intuitive as possible.** The video is for a 15-year-old who may have missed the class. Every idea gets three things, in this order:
+     1. An everyday analogy: commit = a photo of the project, class = a cookie mold, loop vs NumPy = a cashier scanning item by item vs the whole cart at once, reshape = the same eggs in a different carton, mask = a colander, slice = a window rather than a photocopy.
+     2. A concrete example with small, real numbers.
+     3. Only then, the definition and the code.
+   - **Show operations, don't describe them.** Animate them step by step across `Paso`s:
+     - A `Matriz` whose axis collapses for a reduction.
+     - A `Tabla` of shapes for broadcasting, with the failing row framed by a `Marco`.
+     - `Pixeles` cells moving for `reshape`.
+     - A row times a column for a dot product.
+     - Arrows into a neuron for a layer.
+     - Arrows or `Caja` diagrams for data flow and pipelines.
+   - Prefer real data over abstract boxes. For example, draw an actual digit with `Pixeles`, and show the notebook's real timings and accuracies in `Terminal`.
+   - A text-only slide is a last resort; use one only where an idea has no shape.
+   - Keep one idea per scene.
    - Narration is spoken Spanish in *tú*: short sentences, numbers and symbols said in words ("x por W transpuesta"), no markup, no hashes or long identifiers read aloud. On screen goes the real code and terms.
    - "Tu turno" exercises: explain the idea and say "pausa el video"; show only the statement's skeleton. Never show a solution or the answer a check cell verifies (e.g. the parameter count of `net`).
-3. **Check the layout**: `.venv-video/bin/python videos/motor.py <script> --solo-cuadros`, then look at every image in `videos/salida/<stem>/hojas/` (last step of each scene) and at `cuadros/` for steps that replace elements. Done when nothing overlaps, no text runs off its box, and no glyph renders as a box.
-4. **Build and check the voice**: run `motor.py <script>` without flags, then `.venv/bin/python videos/revisar_voz.py <script>`. Whisper is noisy, so look for a technical term mangled across several steps; fix it in `PRONUNCIACION` (motor.py, audio only) or by rephrasing. Sentence-initial English words are read worst: put a Spanish word before them ("Por otro lado, GitHub..."). Rebuilding only synthesizes changed sentences (cached).
+   - **Data in the script.** `.venv-video` has no sklearn or torch. If a scene needs dataset values (images, means), compute them once with `.venv`, then embed them in the script as compact literals. `sem02_numpy.py` does this with its digit images.
+   - **New visuals.** If no element fits, add one to `motor.py` next to the others (`Pixeles` was added this way), with a docstring like the others.
+3. **Check the layout**: `.venv-video/bin/python videos/motor.py <script> --solo-cuadros`, then look at every image in `videos/salida/<stem>/hojas/` (last step of each scene) and at `cuadros/` for steps that replace elements. Done when nothing overlaps, no text runs off its box, no glyph renders as a box, and nothing touches the footer.
+4. **Build and check the voice**: run `motor.py <script>` without flags, then `.venv/bin/python videos/revisar_voz.py <script>`. Whisper is noisy, so look for a technical term mangled across several steps; fix it in `PRONUNCIACION` (motor.py, audio only) or by rephrasing. Sentence-initial English words are read worst: put a Spanish word before them ("Por otro lado, GitHub..."). Rebuilding only synthesizes changed sentences (cached). `PRONUNCIACION` is shared by every script, so a change there re-voices older videos the next time they are rebuilt. If edge-tts fails with a 403 handshake error, Microsoft changed its endpoint: upgrade `edge-tts` in `.venv-video` and pin the new version in `videos/requirements.txt`.
 5. **Deliver**: commit the script (and any engine changes); the MP4 stays out of git. Give the user the MP4 path and its length; they upload it (e.g. YouTube, with the `.srt`).
 
 ## Homework (`tareas/`)
