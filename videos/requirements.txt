@@ -2,7 +2,7 @@
 #   ~/.local/bin/uv venv --python 3.13 .venv-video
 #   ~/.local/bin/uv pip install --python .venv-video/bin/python -r videos/requirements.txt
 # Además necesita ffmpeg y las fuentes Noto Sans y DejaVu (paquetes fonts-noto, fonts-dejavu).
-edge-tts==7.2.8
+edge-tts==7.3.1
 fonttools==4.66.1
 numpy==2.5.3
 pillow==12.3.0

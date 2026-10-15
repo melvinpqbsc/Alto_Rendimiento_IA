@@ -487,6 +487,31 @@ class Matriz(Elemento):
                           self.tam + 4, TINTA, self.color, alinear="centro")
 
 
+class Pixeles(Elemento):
+    """Una imagen en escala de grises dibujada celda por celda: 0 es blanco y vmax es TINTA.
+    numeros=True escribe el valor en cada celda (para mostrar que una imagen es un arreglo)."""
+
+    def __init__(self, x, y, valores, celda=40, vmax=16, numeros=False, etiqueta=None, color=AZUL, tam=24, id=None):
+        self.x, self.y, self.v, self.celda, self.vmax = x, y, np.asarray(valores, float), celda, vmax
+        self.numeros, self.etiqueta, self.color, self.tam, self.id = numeros, etiqueta, color, tam, id
+
+    def dibujar(self, img, d):
+        filas, columnas = self.v.shape
+        for i in range(filas):
+            for j in range(columnas):
+                t = min(max(self.v[i, j] / self.vmax, 0), 1)
+                x0, y0 = self.x + j * self.celda, self.y + i * self.celda
+                d.rectangle((x0, y0, x0 + self.celda, y0 + self.celda), fill=mezclar("#FFFFFF", TINTA, t))
+                if self.numeros:
+                    d.text((x0 + self.celda / 2, y0 + self.celda / 2), f"{self.v[i, j]:g}",
+                           font=fuente("normal", self.tam), fill=TINTA if t < 0.5 else "white", anchor="mm")
+        d.rectangle((self.x, self.y, self.x + columnas * self.celda, self.y + filas * self.celda),
+                    outline=self.color, width=3)
+        if self.etiqueta:
+            dibujar_texto(d, self.x + columnas * self.celda / 2, self.y + filas * self.celda + 12, self.etiqueta,
+                          self.tam + 4, TINTA, self.color, alinear="centro")
+
+
 class Grafica(Elemento):
     """La gráfica de f en [xmin, xmax] dentro de la caja (x, y, w, h), con ejes en 0.
     puntos: [(x, etiqueta)] o [(x, etiqueta, "abajo")] marca f(x) con un punto."""
@@ -597,7 +622,7 @@ PRONUNCIACION = {
     "commits": "cómits",
     "commit": "cómit",
     "PyTorch": "Páitorch",
-    "NumPy": "Númpai",
+    "NumPy": "Nám-pai",
     "scikit-learn": "sáikit-lern",
     "sklearn": "sáikit-lern",
     "Colab": "Cólab",
@@ -639,6 +664,14 @@ PRONUNCIACION = {
     "add": "ad",
     "main": "méin",
     "hash": "jash",
+    "reshape": "ri-chéip",
+    "None": "Non",
+    "argmax": "árg-max",
+    "dtype": "de-táip",
+    "ndim": "en-dim",
+    "sum": "som",
+    "copy": "cópi",
+    "broadcasting": "bródcasting",
 }
 
 
