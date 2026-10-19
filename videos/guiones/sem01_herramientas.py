@@ -1,7 +1,7 @@
 """Video de la semana 1: Nivel_Intermedio/clases/sem01_herramientas.ipynb."""
 
 from motor import (AZUL, GRIS, GRIS_CLARO, MORADO, NARANJA, ROJO, TINTA, VERDE, Caja, Circulo, Codigo, Escena,
-                   Seccion,
+                   Formula, Seccion,
                    Flecha, Grafica, Linea, Marco, Matriz, Paso, Tabla, Terminal, Texto, Vineta, vinetas)
 import numpy as np
 
@@ -18,8 +18,8 @@ def red(x0, y0, entradas=3, salidas=2, sep=150, dx=420):
     alto = (entradas - 1) * sep
     ys_out = [y0 + alto / 2 + (j - (salidas - 1) / 2) * sep for j in range(salidas)]
     elementos = [Linea(x0, yi, x0 + dx, yo, color="#B9C7E8", grosor=4) for yi in ys_in for yo in ys_out]
-    elementos += [Circulo(x0, y, 46, f"x{'₁₂₃₄₅'[i]}", AZUL) for i, y in enumerate(ys_in)]
-    elementos += [Circulo(x0 + dx, y, 46, f"y{'₁₂₃₄₅'[j]}", VERDE) for j, y in enumerate(ys_out)]
+    elementos += [Circulo(x0, y, 46, f"$x_{i + 1}$", AZUL) for i, y in enumerate(ys_in)]
+    elementos += [Circulo(x0 + dx, y, 46, f"$y_{j + 1}$", VERDE) for j, y in enumerate(ys_out)]
     return elementos
 
 
@@ -416,10 +416,10 @@ ESCENAS = [
             "Si un lote de tres ejemplos tiene pérdida promedio dos, y otro de un solo ejemplo tiene pérdida cuatro, "
             "el promedio no es tres. Hay que ponderar por el tamaño: tres por dos, más uno por cuatro, "
             "dividido entre cuatro ejemplos. Da dos coma cinco.",
-            Texto(200, 520, "(2.0 + 4.0) / 2 = 3.0", 44, ROJO),
-            Texto(700, 520, "✗  ignora el tamaño de los lotes", 36, ROJO),
-            Texto(200, 610, "(3 × 2.0 + 1 × 4.0) / 4 = **2.5**", 44, VERDE),
-            Texto(980, 610, "✓  cada ejemplo cuenta igual", 36, VERDE),
+            Formula(200, 470, r"\frac{2.0 + 4.0}{2} = 3.0", 40, ROJO),
+            Texto(800, 492, "✗  ignora el tamaño de los lotes", 36, ROJO),
+            Formula(200, 590, r"\frac{3 \times 2.0 + 1 \times 4.0}{4} = \mathbf{2.5}", 40, VERDE),
+            Texto(800, 612, "✓  cada ejemplo cuenta igual", 36, VERDE),
         ),
         Paso(
             "Tu clase RunningMean guarda dos números: el total, que es la suma de valor por tamaño, "
@@ -442,8 +442,8 @@ ESCENAS = [
             *red(250, 330),
             Texto(250, 760, "3 entradas", 30, GRIS, alinear="centro"),
             Texto(670, 760, "2 salidas", 30, GRIS, alinear="centro"),
-            Texto(900, 330, "y₁ = w₁₁·x₁ + w₁₂·x₂ + w₁₃·x₃ + b₁", 40, VERDE),
-            Texto(900, 410, "y₂ = w₂₁·x₁ + w₂₂·x₂ + w₂₃·x₃ + b₂", 40, VERDE),
+            Formula(900, 330, r"y_1 = w_{11}\,x_1 + w_{12}\,x_2 + w_{13}\,x_3 + b_1", 44, VERDE),
+            Formula(900, 410, r"y_2 = w_{21}\,x_1 + w_{22}\,x_2 + w_{23}\,x_3 + b_2", 44, VERDE),
             Texto(900, 510, "6 **pesos** (las líneas) + 2 **sesgos**", 36, GRIS),
         ),
         Paso(
@@ -453,7 +453,7 @@ ESCENAS = [
             Linea(900, 600, 1820, 600, GRIS_CLARO, 3),
             Matriz(900, 660, 4, 3, 44, AZUL, etiqueta="x: (4, 3)"),
             Texto(1055, 720, "@", 48, alinear="centro"),
-            Matriz(1100, 680, 3, 2, 44, MORADO, etiqueta="Wᵀ: (3, 2)"),
+            Matriz(1100, 680, 3, 2, 44, MORADO, etiqueta="$W^\\top$: (3, 2)"),
             Texto(1225, 720, "+", 48, alinear="centro"),
             Matriz(1270, 720, 1, 2, 44, NARANJA, etiqueta="b: (2,)"),
             Texto(1395, 720, "=", 48, alinear="centro"),
@@ -547,7 +547,7 @@ class Linear(Module):
             "Dos ejercicios más. Primero, la activación sigmoide: uno sobre uno más e a la menos x. "
             "Lleva cualquier número al intervalo entre cero y uno, y en cero vale exactamente un medio.",
             Grafica(150, 280, 700, 480, lambda x: 1 / (1 + np.exp(-x)), -6, 6, -0.1, 1.1, MORADO,
-                    "σ(x) = 1 / (1 + e⁻ˣ)", puntos=[(0, "σ(0) = 0.5", "abajo")]),
+                    r"$\sigma(x) = 1/(1 + e^{-x})$", puntos=[(0, r"$\sigma(0) = 0.5$", "abajo")]),
         ),
         Paso(
             "Segundo, una función que cuente los parámetros de un modelo: recorre la lista de parámetros "
@@ -555,7 +555,7 @@ class Linear(Module):
             "más cuatro sesgos: dieciséis.",
             Texto(1000, 290, "`count_parameters(model)`", 38, acento=MORADO),
             Texto(1000, 380, "suma `.size` de cada arreglo de `model.parameters()`", 32, GRIS, ancho=820),
-            Texto(1000, 500, "`Linear(3, 4)`:  3 × 4 pesos + 4 sesgos = **16**", 36),
+            Texto(1000, 500, r"`Linear(3, 4)`:  $3 \times 4$ pesos + 4 sesgos = **16**", 36),
             Texto(1000, 580, "`ReLU()`:  **0**", 36),
         ),
         Paso(

@@ -1,6 +1,6 @@
 """Video de la semana 2: Nivel_Intermedio/clases/sem02_numpy.ipynb."""
 
-from motor import (AZUL, GRIS, GRIS_CLARO, MORADO, NARANJA, ROJO, TINTA, VERDE, Caja, Circulo, Codigo, Escena,
+from motor import (AZUL, GRIS, GRIS_CLARO, MORADO, NARANJA, ROJO, TINTA, VERDE, Caja, Circulo, Codigo, Escena, Formula,
                    Flecha, Linea, Marco, Matriz, Paso, Pixeles, Seccion, Tabla, Terminal, Texto, Vineta, vinetas)
 import numpy as np
 
@@ -450,8 +450,8 @@ ESCENAS = [
             "Para comparar dos imágenes, una medida natural es la distancia al cuadrado: la suma de las diferencias "
             "al cuadrado, píxel por píxel. Tu tarea es calcularla entre todas las imágenes de A y todas las de B, "
             "sin bucles.",
-            Texto(130, 260, "‖a − b‖² = Σₖ (aₖ − bₖ)²", 46, acento=AZUL),
-            Texto(130, 350, "`pairwise_sq_dists(A, B)`:  A (n, d),  B (m, d)  →  D (n, m)", 38, acento=AZUL),
+            Formula(130, 250, r"\lVert a - b \rVert^2 = \sum_k (a_k - b_k)^2", 46),
+            Texto(130, 380, "`pairwise_sq_dists(A, B)`:  A (n, d),  B (m, d)  →  D (n, m)", 38, acento=AZUL),
         ),
         Paso(
             "El plan: a A le agregas un eje en el medio, y a B uno al principio. Al restarlos, el broadcasting "
@@ -497,9 +497,9 @@ ESCENAS = [
             "Última parte: álgebra lineal. El producto punto multiplica dos vectores elemento a elemento, y suma. "
             "Uno por cuatro, más dos por menos uno, más tres por cero coma cinco: da tres coma cinco.",
             Matriz(200, 300, 1, 3, 100, AZUL, valores=[[1.0, 2.0, 3.0]], tam=34, etiqueta="`a`"),
-            Texto(560, 320, "·", 70, alinear="centro"),
+            Formula(560, 335, r"\bullet", 40, alinear="centro"),
             Matriz(620, 300, 1, 3, 100, VERDE, valores=[[4.0, -1.0, 0.5]], tam=34, etiqueta="`b`"),
-            Texto(1000, 320, "= 4 − 2 + 1.5 = **3.5**", 46),
+            Formula(990, 320, r"= 1 \cdot 4 + 2 \cdot (-1) + 3 \cdot 0.5 = \mathbf{3.5}", 46),
         ),
         Paso(
             "En NumPy se escribe a arroba b. Y es la operación más común de todo el deep learning: "
@@ -507,9 +507,9 @@ ESCENAS = [
             Texto(200, 470, "`a @ b`  →  3.5", 42, acento=AZUL),
             Linea(440, 640, 740, 740, "#B9C7E8", 4), Linea(440, 740, 740, 740, "#B9C7E8", 4),
             Linea(440, 840, 740, 740, "#B9C7E8", 4),
-            Circulo(400, 640, 40, "x₁", AZUL), Circulo(400, 740, 40, "x₂", AZUL), Circulo(400, 840, 40, "x₃", AZUL),
-            Circulo(780, 740, 50, "Σ", VERDE),
-            Texto(900, 710, "una neurona:  **w · x + b**", 44, acento=VERDE),
+            Circulo(400, 640, 40, "$x_1$", AZUL), Circulo(400, 740, 40, "$x_2$", AZUL), Circulo(400, 840, 40, "$x_3$", AZUL),
+            Circulo(780, 740, 50, r"$\Sigma$", VERDE, tam=40),
+            Texto(900, 710, r"una neurona:  $\textcolor{verde}{w \cdot x + b}$", 44),
         ),
     ),
     Escena(
@@ -590,8 +590,10 @@ ESCENAS = [
             "El producto punto mide parecido, pero favorece a las imágenes con más tinta. Al desarrollar la distancia "
             "a cada promedio, sale exactamente una capa lineal: pesos iguales a dos veces el promedio, "
             "y un sesgo igual a menos su norma al cuadrado.",
-            Texto(960, 520, "−‖x − μ_c‖²  =  2 μ_c · x  −  ‖μ_c‖²  −  ‖x‖²", 44, alinear="centro"),
-            Texto(960, 600, "pesos  W_c = 2μ_c  ·  sesgo  b_c = −‖μ_c‖²  ·  el último término es igual para todos",
+            Formula(960, 510, r"-\lVert x - \mu_c \rVert^2 = \textcolor{azul}{2\mu_c} \cdot x "
+                    r"- \textcolor{naranja}{\lVert \mu_c \rVert^2} - \lVert x \rVert^2", 44, alinear="centro"),
+            Texto(960, 600, r"pesos  $\textcolor{azul}{W_c = 2\mu_c}$  ·  sesgo  $\textcolor{naranja}{b_c = -\lVert \mu_c \rVert^2}$"
+                  "  ·  el último término es igual para todos",
                   32, GRIS, alinear="centro"),
         ),
         Paso(

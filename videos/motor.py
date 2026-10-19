@@ -16,6 +16,8 @@ Salida en videos/salida/<nombre>/ (gitignored):
     hojas/            el último paso de cada escena, de a cuatro por imagen (revisión rápida)
 La narración se genera con edge-tts (necesita internet) y se guarda en
 videos/salida/cache_tts/, así que volver a construir solo sintetiza las frases nuevas.
+Las ecuaciones (Formula y $...$ en el marcado) se compilan con LaTeX y quedan en
+videos/salida/cache_latex/.
 
 --solo-cuadros dibuja los PNG sin narración ni video: es la forma rápida de revisar
 el diseño. --escena N limita todo a la escena N (desde 1).
@@ -109,10 +111,65 @@ def tinte(color, t=0.88):
     return mezclar(color, "#FFFFFF", t)
 
 
-# ------------------------------------------------- texto enriquecido (marcado)
-# **negrita**, `código` y ==resaltado== (en el color de acento del elemento).
+# ------------------------------------------------------------------- LaTeX
+# Las ecuaciones se componen con LaTeX de verdad (latex + dvipng del sistema) y se pegan
+# como imagen. Cada fórmula se compila una vez y queda en salida/cache_latex/.
 
-_MARCAS = re.compile(r"(\*\*.+?\*\*|`.+?`|==.+?==)")
+CACHE_LATEX = SALIDA / "cache_latex"
+# Colores del tema con nombre, para usar \textcolor{azul}{W} dentro de una fórmula.
+_COLORES_LATEX = {"tinta": TINTA, "gris": GRIS, "azul": AZUL, "verde": VERDE, "naranja": NARANJA,
+                  "morado": MORADO, "rojo": ROJO}
+_PREAMBULO_LATEX = r"""\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,bm,lmodern,xcolor}
+\usepackage[active,tightpage,lyx]{preview}
+%s
+\begin{document}
+\begin{preview}\color{base}$%s%s$\end{preview}
+\end{document}
+"""
+_cache_latex = {}
+
+
+def latex(tex, tam, color=TINTA, display=True):
+    """Compila la fórmula tex y devuelve (imagen RGBA, profundidad bajo la línea base en px).
+    tam es el tamaño de letra en px, como en Texto."""
+    clave = (tex, tam, color, display)
+    if clave in _cache_latex:
+        return _cache_latex[clave]
+    colores = dict(_COLORES_LATEX, base=color)
+    definiciones = "\n".join(rf"\definecolor{{{n}}}{{HTML}}{{{c.lstrip('#')}}}" for n, c in colores.items())
+    fuente_tex = _PREAMBULO_LATEX % (definiciones, r"\displaystyle " if display else "", tex)
+    nombre = hashlib.sha1(fuente_tex.encode() + str(tam).encode()).hexdigest()[:16]
+    png, prof = CACHE_LATEX / f"{nombre}.png", CACHE_LATEX / f"{nombre}.txt"
+    if not png.exists():
+        CACHE_LATEX.mkdir(parents=True, exist_ok=True)
+        tmp = CACHE_LATEX / f"tmp_{nombre}"
+        tmp.mkdir(exist_ok=True)
+        (tmp / "f.tex").write_text(fuente_tex)
+        r = subprocess.run(["latex", "-interaction=nonstopmode", "-halt-on-error", "f.tex"], cwd=tmp,
+                           capture_output=True, text=True)
+        if r.returncode:
+            error = [l for l in r.stdout.splitlines() if l.startswith("!")]
+            sys.exit(f"LaTeX no compila {tex!r}: {' '.join(error) or r.stdout[-500:]}")
+        # Se compila al doble de resolución y se reduce: bordes más suaves que el antialias de dvipng.
+        # 10 pt de LaTeX a D ppp miden 10·D/72.27 px; se elige D para que 1 em ≈ 1.1·tam.
+        dpi = round(2 * tam * 1.1 * 72.27 / 10)
+        r = subprocess.run(["dvipng", "-D", str(dpi), "-bg", "Transparent", "--depth", "-o", "f.png", "f.dvi"],
+                           cwd=tmp, capture_output=True, text=True)
+        profundidad = int(re.search(r"depth=(-?\d+)", r.stdout).group(1)) / 2
+        img = Image.open(tmp / "f.png").convert("RGBA")
+        img.resize((round(img.width / 2), round(img.height / 2)), Image.LANCZOS).save(png)
+        prof.write_text(str(profundidad))
+        shutil.rmtree(tmp)
+    _cache_latex[clave] = Image.open(png).copy(), float(prof.read_text())
+    return _cache_latex[clave]
+
+
+# ------------------------------------------------- texto enriquecido (marcado)
+# **negrita**, `código`, ==resaltado== (en el color de acento del elemento) y $fórmula$
+# (LaTeX en línea, del color del texto).
+
+_MARCAS = re.compile(r"(\*\*.+?\*\*|`.+?`|==.+?==|\$.+?\$)")
 
 
 def _tramos(texto):
@@ -125,6 +182,8 @@ def _tramos(texto):
             yield parte[1:-1], "codigo"
         elif parte.startswith("=="):
             yield parte[2:-2], "acento"
+        elif parte.startswith("$"):
+            yield parte[1:-1], "mate"
         else:
             yield parte, "normal"
 
@@ -156,12 +215,15 @@ def _maquetar(texto, tam, ancho_max):
     for parrafo in texto.split("\n"):
         linea, x = [], 0.0
         for trozo, estilo in _tramos(parrafo):
-            # El código no se parte en palabras: un `identificador` es una unidad.
-            palabras = [trozo] if estilo == "codigo" else re.split(r"(?<= )", trozo)
+            # El código y las fórmulas no se parten en palabras: cada uno es una unidad.
+            palabras = [trozo] if estilo in ("codigo", "mate") else re.split(r"(?<= )", trozo)
             for palabra in palabras:
                 if not palabra:
                     continue
-                ancho = _largo(palabra.rstrip(" "), estilo, tam)
+                if estilo == "mate":
+                    ancho = latex(palabra, tam, display=False)[0].width
+                else:
+                    ancho = _largo(palabra.rstrip(" "), estilo, tam)
                 if estilo == "codigo":
                     ancho += tam * 0.3
                 # Solo se corta donde había un espacio: un signo pegado a la palabra anterior no baja solo.
@@ -203,6 +265,10 @@ def dibujar_texto(d, x, y, texto, tam, color=TINTA, acento=AZUL, ancho_max=None,
                 )
                 f = fuente("codigo", round(tam * 0.88))
                 d.text((cx + pad, base), texto_palabra, font=f, fill=mezclar(acento, TINTA, 0.35), anchor="ls")
+            elif estilo == "mate":
+                formula, profundidad = latex(palabra, tam, color, display=False)
+                pos = (round(cx), round(base + profundidad - formula.height))
+                d._image.paste(formula, pos, formula)
             else:
                 c = acento if estilo == "acento" else color
                 px = cx
@@ -232,6 +298,24 @@ class Texto(Elemento):
 
     def dibujar(self, img, d):
         dibujar_texto(d, self.x, self.y, self.texto, self.tam, self.color, self.acento, self.ancho, self.alinear)
+
+
+class Formula(Elemento):
+    """Una ecuación en LaTeX (modo display, sin los $). y es el borde de arriba; alinear:
+    'izq' o 'centro' (x es entonces el centro). Partes de color con \\textcolor{azul}{W}
+    (colores: tinta, gris, azul, verde, naranja, morado, rojo). Para fórmulas dentro de
+    una frase, usa $...$ en el marcado de Texto."""
+
+    def __init__(self, x, y, tex, tam=48, color=TINTA, alinear="izq", id=None):
+        self.x, self.y, self.tex, self.tam, self.color, self.alinear, self.id = x, y, tex, tam, color, alinear, id
+
+    def tamano(self):
+        return latex(self.tex, self.tam, self.color)[0].size
+
+    def dibujar(self, img, d):
+        formula, _ = latex(self.tex, self.tam, self.color)
+        x = self.x - formula.width / 2 if self.alinear == "centro" else self.x
+        img.paste(formula, (round(x), round(self.y)), formula)
 
 
 class Vineta(Elemento):
@@ -287,6 +371,8 @@ class Caja(Elemento):
 
 
 class Circulo(Elemento):
+    """Círculo con un texto corto al centro. Un texto entre $...$ se compone con LaTeX ($x_1$)."""
+
     def __init__(self, cx, cy, r, texto="", color=AZUL, tam=30, relleno=None, color_texto="white", id=None):
         self.cx, self.cy, self.r, self.texto, self.color, self.tam = cx, cy, r, texto, color, tam
         self.relleno = relleno or color
@@ -295,7 +381,11 @@ class Circulo(Elemento):
     def dibujar(self, img, d):
         d.ellipse((self.cx - self.r, self.cy - self.r, self.cx + self.r, self.cy + self.r),
                   fill=self.relleno, outline=self.color, width=4)
-        if self.texto:
+        if self.texto.startswith("$") and self.texto.endswith("$"):
+            color = "#FFFFFF" if self.color_texto == "white" else self.color_texto
+            formula, _ = latex(self.texto[1:-1], self.tam, color, display=False)
+            img.paste(formula, (round(self.cx - formula.width / 2), round(self.cy - formula.height / 2)), formula)
+        elif self.texto:
             d.text((self.cx, self.cy), self.texto, font=fuente("negrita", self.tam), fill=self.color_texto, anchor="mm")
 
 

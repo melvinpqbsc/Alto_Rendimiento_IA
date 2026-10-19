@@ -73,6 +73,11 @@ Each class notebook gets a narrated explainer video (Spanish, Ecuadorian voice, 
    - Keep one idea per scene.
    - Narration is spoken Spanish in *tú*: short sentences, numbers and symbols said in words ("x por W transpuesta"), no markup, no hashes or long identifiers read aloud. On screen goes the real code and terms.
    - "Tu turno" exercises: explain the idea and say "pausa el video"; show only the statement's skeleton. Never show a solution or the answer a check cell verifies (e.g. the parameter count of `net`).
+   - **Equations in LaTeX, never in Unicode.** Write math as LaTeX, not as `‖a − b‖²` or `y₁ = w₁₁·x₁`. `motor.py` compiles each formula with the system `latex` + `dvipng` and caches it in `videos/salida/cache_latex/`. There are three ways to use it:
+     - `Formula(x, y, r"...")` for a display equation on its own line.
+     - `$...$` inside any marked-up text (`Texto`, `Caja`, `Matriz`/`Grafica` labels) for math within a sentence.
+     - `Circulo(..., "$x_1$")` for a symbol inside a node.
+     Color parts with `\textcolor{azul}{W}` (theme colors: tinta, gris, azul, verde, naranja, morado, rojo). Wrap the whole operand, not a lone operator, so the spacing stays right. Use `\dfrac` for a fraction inside a sentence, and remember a display formula is taller than a text line, so check the space below it. NumPy shapes like `(5, 1) × (1, 5) → (5, 5)` are code, not math: keep them as text. A formula that doesn't compile stops the build and shows the LaTeX error.
    - **Data in the script.** `.venv-video` has no sklearn or torch. If a scene needs dataset values (images, means), compute them once with `.venv`, then embed them in the script as compact literals. `sem02_numpy.py` does this with its digit images.
    - **New visuals.** If no element fits, add one to `motor.py` next to the others (`Pixeles` was added this way), with a docstring like the others.
 3. **Check the layout**: `.venv-video/bin/python videos/motor.py <script> --solo-cuadros`, then look at every image in `videos/salida/<stem>/hojas/` (last step of each scene) and at `cuadros/` for steps that replace elements. Done when nothing overlaps, no text runs off its box, no glyph renders as a box, and nothing touches the footer.

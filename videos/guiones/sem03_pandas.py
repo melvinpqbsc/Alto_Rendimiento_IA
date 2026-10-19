@@ -1,6 +1,6 @@
 """Video de la semana 3: Nivel_Intermedio/clases/sem03_pandas.ipynb."""
 
-from motor import (AZUL, GRIS, MORADO, NARANJA, ROJO, TINTA, VERDE, Caja, Codigo, Dispersion, Escena, Flecha,
+from motor import (AZUL, GRIS, MORADO, NARANJA, ROJO, TINTA, VERDE, Caja, Codigo, Dispersion, Escena, Formula, Flecha,
                    Histograma, Marco, Matriz, Paso, Pixeles, Seccion, Tabla, Terminal, Texto, Vineta, vinetas)
 import numpy as np
 
@@ -373,19 +373,20 @@ ESCENAS = [
         Paso(
             "Para medirlo, resta la media a cada dato. En el curso B, cada nota queda a tres puntos del siete: "
             "menos tres, o más tres.",
-            Matriz(960, 500, 1, 6, 110, ROJO, valores=[[-3, 3, -3, 3, -3, 3]], tam=36, etiqueta="x − x̄"),
+            Matriz(960, 500, 1, 6, 110, ROJO, valores=[[-3, 3, -3, 3, -3, 3]], tam=36, etiqueta=r"$x - \bar{x}$"),
         ),
         Paso(
             "Eleva al cuadrado, para que los negativos no cancelen a los positivos: seis veces nueve, cincuenta y cuatro. "
             "Divide entre n menos uno, que es cinco, y saca la raíz: unos tres coma tres. Esa es la desviación estándar, "
             "y queda en las mismas unidades que los datos.",
-            Texto(110, 520, "(9 · 6) / 5 = 10,8  →  √10,8 ≈ **3,3**", 40, acento=ROJO),
-            Texto(110, 640, "s = √( Σ (xᵢ − x̄)² / (n − 1) )", 48),
+            Formula(110, 500, r"\frac{6 \cdot 9}{5} = 10{,}8 \quad\longrightarrow\quad \sqrt{10{,}8} \approx "
+                    r"\textcolor{rojo}{\mathbf{3{,}3}}", 40),
+            Formula(110, 620, r"s = \sqrt{\frac{\sum_i (x_i - \bar{x})^2}{n - 1}}", 48),
         ),
         Paso(
             "Un detalle: pandas divide entre n menos uno, y NumPy entre n, salvo que le pidas otra cosa con el "
             "argumento ddof. Con muchos datos casi no importa, pero una comparación exacta va a fallar.",
-            Texto(960, 780, "pandas: n − 1   ·   NumPy: n   (salvo `ddof=1`)", 40, NARANJA, NARANJA, alinear="centro"),
+            Texto(960, 780, "pandas: $n - 1$   ·   NumPy: $n$   (salvo `ddof=1`)", 40, NARANJA, NARANJA, alinear="centro"),
             Texto(960, 870, "`describe()` da media, desviación, mínimo, cuartiles y máximo de una vez", 34, GRIS,
                   alinear="centro"),
         ),
@@ -518,9 +519,9 @@ ESCENAS = [
         Paso(
             "Cerca de uno, suben juntas. Cerca de menos uno, cuando una sube la otra baja. Cerca de cero, "
             "no hay relación en línea recta.",
-            Texto(1550, 330, "**r ≈ 1**\nsuben juntas", 32, VERDE, VERDE),
-            Texto(1550, 480, "**r ≈ −1**\nuna sube,\nla otra baja", 32, ROJO, ROJO),
-            Texto(1550, 680, "**r ≈ 0**\nsin relación\nlineal", 32, GRIS),
+            Texto(1550, 330, r"$\boldsymbol{r \approx 1}$" "\nsuben juntas", 32, VERDE, VERDE),
+            Texto(1550, 480, r"$\boldsymbol{r \approx -1}$" "\nuna sube,\nla otra baja", 32, ROJO, ROJO),
+            Texto(1550, 680, r"$\boldsymbol{r \approx 0}$" "\nsin relación\nlineal", 32, GRIS),
         ),
     ),
     Escena(
@@ -549,7 +550,8 @@ ESCENAS = [
             Codigo(110, 260, "def my_corr(x, y):\n    # TODO: la fórmula de Pearson, restando primero las medias\n\n"
                    "r_all = None         # TODO: todos los pingüinos\n"
                    "r_by_species = None  # TODO: {\"Adelie\": ..., \"Chinstrap\": ..., \"Gentoo\": ...}", 32),
-            Texto(110, 640, "r = Σ (xᵢ − x̄)(yᵢ − ȳ)  /  ( √Σ (xᵢ − x̄)²  ·  √Σ (yᵢ − ȳ)² )", 40),
+            Formula(110, 620, r"r = \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}"
+                    r"{\sqrt{\sum_i (x_i - \bar{x})^2} \, \sqrt{\sum_i (y_i - \bar{y})^2}}", 44),
             pausa=1.2,
         ),
     ),
