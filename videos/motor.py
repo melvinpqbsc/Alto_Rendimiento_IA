@@ -604,18 +604,37 @@ class Pixeles(Elemento):
 
 class Grafica(Elemento):
     """La gráfica de f en [xmin, xmax] dentro de la caja (x, y, w, h), con ejes en 0.
-    puntos: [(x, etiqueta)] o [(x, etiqueta, "abajo")] marca f(x) con un punto."""
+    puntos: [(x, etiqueta)] o [(x, etiqueta, "abajo")] marca f(x) con un punto.
+    rectas: [(a, color)] dibuja la tangente a f en x = a (pendiente numérica).
+    camino: [x0, x1, ...] los pasos de un descenso de gradiente, como puntos sobre f unidos por segmentos.
+    Lo que sale del rango [ymin, ymax] no se dibuja."""
 
-    def __init__(self, x, y, w, h, f, xmin, xmax, ymin, ymax, color=AZUL, etiqueta=None, puntos=(), id=None):
+    def __init__(self, x, y, w, h, f, xmin, xmax, ymin, ymax, color=AZUL, etiqueta=None, puntos=(), rectas=(),
+                 camino=(), id=None):
         self.caja = (x, y, w, h)
         self.f, self.rx, self.ry, self.color, self.etiqueta, self.puntos, self.id = (
             f, (xmin, xmax), (ymin, ymax), color, etiqueta, puntos, id,
         )
+        self.rectas, self.camino = rectas, camino
 
     def _a_pantalla(self, xv, yv):
         x, y, w, h = self.caja
         (x0, x1), (y0, y1) = self.rx, self.ry
         return x + (xv - x0) / (x1 - x0) * w, y + h - (yv - y0) / (y1 - y0) * h
+
+    def _curva(self, d, g, color, grosor):
+        """Dibuja g en el rango x, cortada en tramos donde se sale del rango y."""
+        tramo = []
+        for xv in np.linspace(*self.rx, 400):
+            yv = g(xv)
+            if self.ry[0] <= yv <= self.ry[1]:
+                tramo.append(self._a_pantalla(xv, yv))
+            else:
+                if len(tramo) > 1:
+                    d.line(tramo, fill=color, width=grosor, joint="curve")
+                tramo = []
+        if len(tramo) > 1:
+            d.line(tramo, fill=color, width=grosor, joint="curve")
 
     def dibujar(self, img, d):
         x, y, w, h = self.caja
@@ -626,9 +645,21 @@ class Grafica(Elemento):
         ejx, ey0 = self._a_pantalla(0, self.ry[0])
         _, ey1 = self._a_pantalla(0, self.ry[1])
         d.line((ejx, ey0, ejx, ey1), fill=GRIS, width=3)
-        xs = np.linspace(*self.rx, 400)
-        pts = [self._a_pantalla(xv, self.f(xv)) for xv in xs]
-        d.line(pts, fill=self.color, width=8, joint="curve")
+        self._curva(d, self.f, self.color, 8)
+        for a, color in self.rectas:
+            m = (self.f(a + 1e-5) - self.f(a - 1e-5)) / 2e-5
+            self._curva(d, lambda xv: self.f(a) + m * (xv - a), color, 5)
+            px, py = self._a_pantalla(a, self.f(a))
+            d.ellipse((px - 11, py - 11, px + 11, py + 11), fill=color)
+        visibles = [self._a_pantalla(xv, self.f(xv)) if self.ry[0] <= self.f(xv) <= self.ry[1] else None
+                    for xv in self.camino]
+        for p, q in zip(visibles, visibles[1:]):
+            if p and q:
+                d.line((p, q), fill=NARANJA, width=3)
+        for i, p in enumerate(visibles):
+            if p:
+                r = 11 if i == 0 else 8
+                d.ellipse((p[0] - r, p[1] - r, p[0] + r, p[1] + r), fill=NARANJA if i else ROJO)
         for xv, texto, *lado in self.puntos:
             px, py = self._a_pantalla(xv, self.f(xv))
             d.ellipse((px - 11, py - 11, px + 11, py + 11), fill=NARANJA)
@@ -722,12 +753,15 @@ class Histograma(_Ejes):
 class Dispersion(_Ejes):
     """Un punto por par (x, y). series: [(xs, ys)] por grupo, con su color.
     tendencia=True dibuja la recta de mínimos cuadrados de cada grupo.
-    cuadrantes=True marca las medias (de todos los puntos) y el signo de (x − x̄)(y − ȳ) en cada cuadrante."""
+    cuadrantes=True marca las medias (de todos los puntos) y el signo de (x − x̄)(y − ȳ) en cada cuadrante.
+    rectas: [(m, b, color)] dibuja rectas y = m·x + b elegidas a mano (por ejemplo, modelos candidatos)."""
 
     def __init__(self, x, y, w, h, series, colores=(GRIS,), nombres=None, rx=(0, 1), ry=(0, 1), marcas_x=(),
-                 marcas_y=(), etiqueta_x=None, etiqueta_y=None, tendencia=False, cuadrantes=False, radio=6, id=None):
+                 marcas_y=(), etiqueta_x=None, etiqueta_y=None, tendencia=False, cuadrantes=False, radio=6,
+                 rectas=(), id=None):
         self._preparar(x, y, w, h, rx, ry, marcas_x, marcas_y, etiqueta_x, etiqueta_y, nombres, colores)
         self.series, self.tendencia, self.cuadrantes, self.radio, self.id = series, tendencia, cuadrantes, radio, id
+        self.rectas = rectas
 
     def dibujar(self, img, d):
         self._fondo(d)
@@ -760,7 +794,100 @@ class Dispersion(_Ejes):
                 m, b = np.polyfit(xs, ys, 1)
                 tramo = (xs.min(), xs.max())
                 d.line([self._a_pantalla(v, m * v + b) for v in tramo], fill=mezclar(color, TINTA, 0.3), width=7)
+        for m, b, color in self.rectas:
+            d.line([self._a_pantalla(v, m * v + b) for v in self.rx], fill=color, width=7)
         self._ejes(img, d)
+
+
+class Contornos(_Ejes):
+    """Mapa de curvas de nivel de f(a, b) (vectorizada sobre arreglos) en la caja (x, y, w, h), sobre rx × ry.
+    niveles: los valores de las curvas; entre curvas, bandas más oscuras cuanto más bajo es f (el valle).
+    caminos: [(puntos, color)], cada uno una lista de (a, b) unidos por segmentos; el primero se marca más grande.
+    flechas: [(a, b, da, db)] en unidades de los datos (por ejemplo, el gradiente).
+    marcas: [(a, b, color, texto)] un punto con su etiqueta (el mínimo, la línea base).
+    igual=True usa la misma escala en los dos ejes (ajusta h para que cuadre con rx y ry)."""
+
+    def __init__(self, x, y, w, h, f, rx, ry, niveles, color=AZUL, caminos=(), flechas=(), marcas=(), marcas_x=(),
+                 marcas_y=(), etiqueta_x=None, etiqueta_y=None, igual=False, id=None):
+        if igual:
+            h = w * (ry[1] - ry[0]) / (rx[1] - rx[0])
+        self._preparar(x, y, w, h, rx, ry, marcas_x, marcas_y, etiqueta_x, etiqueta_y, None, ())
+        self.f, self.niveles, self.color = f, np.asarray(niveles, float), color
+        self.caminos, self.flechas, self.marcas, self.id = caminos, flechas, marcas, id
+
+    def _mapa(self):
+        x, y, w, h = self.caja
+        w, h = round(w), round(h)
+        a = np.linspace(self.rx[0], self.rx[1], w)
+        b = np.linspace(self.ry[1], self.ry[0], h)  # la fila 0 de la imagen es el b más grande
+        A, B = np.meshgrid(a, b)
+        banda = np.digitize(self.f(A, B), self.niveles)  # 0 dentro de la curva más baja
+        t = 0.45 + 0.52 * banda / len(self.niveles)
+        base, blanco = np.array(rgb(self.color), float), np.array([255.0, 255.0, 255.0])
+        pix = base + (blanco - base) * t[..., None]
+        borde = np.zeros((h, w), bool)
+        borde[:, 1:] |= banda[:, 1:] != banda[:, :-1]
+        borde[1:, :] |= banda[1:, :] != banda[:-1, :]
+        grueso = borde.copy()
+        grueso[:, 1:] |= borde[:, :-1]
+        grueso[1:, :] |= borde[:-1, :]
+        grueso[:, :-1] |= borde[:, 1:]
+        pix[grueso] = np.array(rgb(mezclar(self.color, TINTA, 0.35)), float)
+        return Image.fromarray(pix.round().astype(np.uint8), "RGB")
+
+    def dibujar(self, img, d):
+        self._fondo(d)
+        x, y, w, h = self.caja
+        img.paste(self._mapa(), (round(x), round(y)))
+        d = ImageDraw.Draw(img)
+
+        def dentro(p):
+            return x <= p[0] <= x + w and y <= p[1] <= y + h
+
+        for puntos, color in self.caminos:
+            pts = [self._a_pantalla(a, b) for a, b in puntos]
+            for p, q in zip(pts, pts[1:]):
+                if dentro(p) and dentro(q):
+                    d.line((p, q), fill=color, width=4)
+            for i, p in enumerate(pts):
+                if dentro(p):
+                    r = 11 if i == 0 else 6
+                    d.ellipse((p[0] - r, p[1] - r, p[0] + r, p[1] + r), fill=color, outline="white", width=2)
+        for a, b, da, db in self.flechas:
+            (x1, y1), (x2, y2) = self._a_pantalla(a, b), self._a_pantalla(a + da, b + db)
+            if math.hypot(x2 - x1, y2 - y1) > 12:
+                Flecha(x1, y1, x2, y2, ROJO, 4).dibujar(img, d)
+        for a, b, color, texto in self.marcas:
+            px, py = self._a_pantalla(a, b)
+            d.ellipse((px - 13, py - 13, px + 13, py + 13), fill=color, outline="white", width=3)
+            if texto:
+                dibujar_texto(d, px + 22, py - 18, texto, 28, color, color)
+        self._ejes(img, d)
+
+
+class Barras(Elemento):
+    """Barras verticales, una por categoría, con su valor encima y su nombre debajo, en la caja (x, y, w, h).
+    vmax es el valor de una barra que llena la caja. colores: uno para todas o uno por barra."""
+
+    def __init__(self, x, y, w, h, nombres, valores, colores=AZUL, vmax=1.0, formato="{:.2f}", tam=30, id=None):
+        self.caja, self.nombres, self.valores, self.vmax, self.formato, self.tam, self.id = (
+            (x, y, w, h), nombres, valores, vmax, formato, tam, id,
+        )
+        self.colores = [colores] * len(nombres) if isinstance(colores, str) else list(colores)
+
+    def dibujar(self, img, d):
+        x, y, w, h = self.caja
+        n = len(self.nombres)
+        ancho = w / n
+        for i, (nombre, v, color) in enumerate(zip(self.nombres, self.valores, self.colores)):
+            x0 = x + i * ancho + ancho * 0.15
+            x1 = x + (i + 1) * ancho - ancho * 0.15
+            alto = h * min(max(v / self.vmax, 0), 1)
+            d.rounded_rectangle((x0, y + h - alto, x1, y + h), radius=8, fill=color)
+            dibujar_texto(d, (x0 + x1) / 2, y + h - alto - self.tam * 1.5, self.formato.format(v), self.tam, TINTA,
+                          alinear="centro")
+            dibujar_texto(d, (x0 + x1) / 2, y + h + 12, nombre, self.tam, TINTA, color, alinear="centro")
+        d.line((x, y + h, x + w, y + h), fill=GRIS, width=3)
 
 
 # ------------------------------------------------------------- escenas y pasos
@@ -896,6 +1023,7 @@ PRONUNCIACION = {
     "read csv": "rid, ce ese ve",
     "ddof": "de de o efe",
     "Simpson": "Símpson",
+    "eta": "éta",
 }
 
 
