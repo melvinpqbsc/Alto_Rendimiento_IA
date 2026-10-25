@@ -17,3 +17,4 @@ El cronograma completo, con las fechas y lo que se entrega cada semana, está en
 |---|---|---|
 | B0 | [B0_mi_primer_modelo.ipynb](tareas/B0_mi_primer_modelo.ipynb) | 2 |
 | B1 | [B1_ejercicios_numpy.ipynb](tareas/B1_ejercicios_numpy.ipynb) | 3 |
+| B2 | [B2_descenso_gradiente.ipynb](tareas/B2_descenso_gradiente.ipynb) | 5 |
