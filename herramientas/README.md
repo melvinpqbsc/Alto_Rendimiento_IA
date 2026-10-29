@@ -65,3 +65,15 @@ python herramientas/recolectar_entregas.py herramientas/estudiantes.csv --trabaj
 ```
 
 Descarga cada repositorio tal como está en ese momento a `herramientas/recolecciones/<fecha_hora>_P01/<usuario>/` y escribe `registro.csv` con el commit, su fecha y si la carpeta `P01/` tiene un notebook. Esa copia es la entrega: lo que se suba después no cuenta, sin depender de las fechas de los commits (que se pueden alterar desde git).
+
+## Tabla de posiciones de un sprint
+
+Los sprints se entregan con un `predicciones.csv` (columnas `id,Churn`, una fila por cliente de `test.csv`) en la carpeta del sprint. Después de recolectar:
+
+```bash
+python herramientas/recolectar_entregas.py herramientas/estudiantes.csv --trabajo Sprint0 --nivel Intermedio
+python herramientas/calificar_sprint.py herramientas/recolecciones/<fecha_hora>_Sprint0 Nivel_Intermedio/test_oculto/Sprint0_etiquetas.csv
+```
+
+Compara cada `predicciones.csv` con las etiquetas ocultas, imprime la tabla ordenada por F1 de la clase 1 y la guarda en `tabla_posiciones.csv` dentro de la recolección. Los archivos con un formato que no sirve (ids que faltan, valores que no son 0 o 1) quedan al final, sin puntaje y con el motivo. Las etiquetas viven solo en `test_oculto/`, que está en `.gitignore`: si se suben al repositorio público, el sprint queda resuelto para todos.
+
