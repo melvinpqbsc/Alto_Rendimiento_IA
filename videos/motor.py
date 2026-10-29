@@ -688,6 +688,20 @@ class _Ejes(Elemento):
         d.rounded_rectangle((x - 90, y - 30, x + w + 30, y + h + 100), radius=16, fill="white",
                             outline=GRIS_CLARO, width=2)
 
+    def _curva(self, d, g, color, grosor):
+        """Dibuja g en el rango x, cortada en tramos donde se sale del rango y."""
+        tramo = []
+        for xv in np.linspace(*self.rx, 400):
+            yv = g(xv)
+            if self.ry[0] <= yv <= self.ry[1]:
+                tramo.append(self._a_pantalla(xv, yv))
+            else:
+                if len(tramo) > 1:
+                    d.line(tramo, fill=color, width=grosor, joint="curve")
+                tramo = []
+        if len(tramo) > 1:
+            d.line(tramo, fill=color, width=grosor, joint="curve")
+
     def _ejes(self, img, d):
         x, y, w, h = self.caja
         d.line((x, y + h, x + w, y + h), fill=GRIS, width=3)
@@ -709,7 +723,8 @@ class _Ejes(Elemento):
             capa = capa.rotate(90, expand=True)
             img.paste(capa, (round(x - 88), round(y)), capa)
         if self.nombres:
-            lx, ly = x + w - 250, y + 6
+            largo = max(fuente("normal", 28).getlength(n) for n in self.nombres)
+            lx, ly = min(x + w - 250, x + w - 50 - largo), y + 6
             for nombre, color in zip(self.nombres, self.colores):
                 d.rectangle((lx, ly + 6, lx + 26, ly + 32), fill=color)
                 d.text((lx + 38, ly), nombre, font=fuente("normal", 28), fill=TINTA)
@@ -754,14 +769,16 @@ class Dispersion(_Ejes):
     """Un punto por par (x, y). series: [(xs, ys)] por grupo, con su color.
     tendencia=True dibuja la recta de mínimos cuadrados de cada grupo.
     cuadrantes=True marca las medias (de todos los puntos) y el signo de (x − x̄)(y − ȳ) en cada cuadrante.
-    rectas: [(m, b, color)] dibuja rectas y = m·x + b elegidas a mano (por ejemplo, modelos candidatos)."""
+    rectas: [(m, b, color)] dibuja rectas y = m·x + b elegidas a mano (por ejemplo, modelos candidatos).
+    curvas: [(f, color)] o [(f, color, grosor)] dibuja y = f(x) en todo el rango x (un polinomio ajustado, una
+    curva de error interpolada); lo que sale del rango y no se dibuja. Van debajo de los puntos."""
 
     def __init__(self, x, y, w, h, series, colores=(GRIS,), nombres=None, rx=(0, 1), ry=(0, 1), marcas_x=(),
                  marcas_y=(), etiqueta_x=None, etiqueta_y=None, tendencia=False, cuadrantes=False, radio=6,
-                 rectas=(), id=None):
+                 rectas=(), curvas=(), id=None):
         self._preparar(x, y, w, h, rx, ry, marcas_x, marcas_y, etiqueta_x, etiqueta_y, nombres, colores)
         self.series, self.tendencia, self.cuadrantes, self.radio, self.id = series, tendencia, cuadrantes, radio, id
-        self.rectas = rectas
+        self.rectas, self.curvas = rectas, curvas
 
     def dibujar(self, img, d):
         self._fondo(d)
@@ -778,6 +795,8 @@ class Dispersion(_Ejes):
             for sx, sy, signo, color in [(1, -1, "+", VERDE), (-1, 1, "+", VERDE), (-1, -1, "−", ROJO),
                                          (1, 1, "−", ROJO)]:
                 d.text((mx + sx * w / 4, my + sy * h / 4), signo, font=f, fill=color, anchor="mm")
+        for f, color, *grosor in self.curvas:
+            self._curva(d, f, color, grosor[0] if grosor else 6)
         r = self.radio
 
         def puntos(dc):
@@ -863,6 +882,44 @@ class Contornos(_Ejes):
             if texto:
                 dibujar_texto(d, px + 22, py - 18, texto, 28, color, color)
         self._ejes(img, d)
+
+
+class Regiones(_Ejes):
+    """Las regiones de decisión de un clasificador en la caja (x, y, w, h), sobre rx × ry.
+    predecir(A, B): la clase (0, 1, ...) de cada punto de las grillas A y B; la región de cada clase se pinta
+    con un tinte de su color en colores. series: [(xs, ys)] los puntos de cada clase, con esos mismos colores.
+    resolucion: los píxeles por celda de la grilla (más grande es más rápido y más escalonado)."""
+
+    def __init__(self, x, y, w, h, predecir, rx, ry, colores, series=(), nombres=None, marcas_x=(), marcas_y=(),
+                 etiqueta_x=None, etiqueta_y=None, radio=5, resolucion=3, id=None):
+        self._preparar(x, y, w, h, rx, ry, marcas_x, marcas_y, etiqueta_x, etiqueta_y, nombres, colores)
+        self.predecir, self.series, self.radio, self.resolucion, self.id = predecir, series, radio, resolucion, id
+
+    def _mapa(self):
+        _, _, w, h = self.caja
+        w, h = round(w), round(h)
+        nw, nh = math.ceil(w / self.resolucion), math.ceil(h / self.resolucion)
+        a = np.linspace(self.rx[0], self.rx[1], nw)
+        b = np.linspace(self.ry[1], self.ry[0], nh)  # la fila 0 de la imagen es el b más grande
+        A, B = np.meshgrid(a, b)
+        clase = np.asarray(self.predecir(A, B), int)
+        paleta = np.array([rgb(tinte(c, 0.72)) for c in self.colores], np.uint8)
+        return Image.fromarray(paleta[clase], "RGB").resize((w, h), Image.NEAREST)
+
+    def dibujar(self, img, d):
+        self._fondo(d)
+        x, y, _, _ = self.caja
+        img.paste(self._mapa(), (round(x), round(y)))
+        r = self.radio
+
+        def puntos(dc):
+            for (xs, ys), color in zip(self.series, self.colores):
+                for xv, yv in zip(xs, ys):
+                    px, py = self._a_pantalla(xv, yv)
+                    dc.ellipse((px - r, py - r, px + r, py + r), fill=rgb(color) + (220,))
+
+        _con_transparencia(img, puntos)
+        self._ejes(img, ImageDraw.Draw(img))
 
 
 class Barras(Elemento):
@@ -1024,6 +1081,11 @@ PRONUNCIACION = {
     "ddof": "de de o efe",
     "Simpson": "Símpson",
     "eta": "éta",
+    "pipeline": "páiplain",
+    "recall": "rikól",
+    "accuracy": "ákiurasi",
+    "kNN": "ka ene ene",
+    "stratify": "strátifai",
 }
 
 

@@ -10,6 +10,7 @@ El cronograma completo, con las fechas y lo que se entrega cada semana, está en
 | 2 | [sem02_numpy.ipynb](clases/sem02_numpy.ipynb) | NumPy para tensores: formas, indexación, *broadcasting*; una capa como matriz × vector |
 | 3 | [sem03_pandas.ipynb](clases/sem03_pandas.ipynb) | Laboratorio de datos reales: pandas, datos faltantes, `groupby`, gráficos, correlación; tabla, imagen y texto como arreglos |
 | 4 | [sem04_calculo.ipynb](clases/sem04_calculo.ipynb) | Cálculo y probabilidad para DL: derivadas, gradiente, regla de la cadena, descenso de gradiente a mano; *softmax* y entropía cruzada |
+| 5 | [sem05_ml_clasico.ipynb](clases/sem05_ml_clasico.ipynb) | ML clásico en síntesis: entrenamiento/validación/prueba, sobreajuste y sesgo-varianza, validación cruzada, precisión/*recall*/F1; regresión lineal y logística, kNN y árbol en sklearn |
 
 ## Tareas
 
