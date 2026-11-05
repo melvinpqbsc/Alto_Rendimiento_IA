@@ -11,6 +11,7 @@ El cronograma completo, con las fechas y lo que se entrega cada semana, está en
 | 3 | [sem03_pandas.ipynb](clases/sem03_pandas.ipynb) | Laboratorio de datos reales: pandas, datos faltantes, `groupby`, gráficos, correlación; tabla, imagen y texto como arreglos |
 | 4 | [sem04_calculo.ipynb](clases/sem04_calculo.ipynb) | Cálculo y probabilidad para DL: derivadas, gradiente, regla de la cadena, descenso de gradiente a mano; *softmax* y entropía cruzada |
 | 5 | [sem05_ml_clasico.ipynb](clases/sem05_ml_clasico.ipynb) | ML clásico en síntesis: entrenamiento/validación/prueba, sobreajuste y sesgo-varianza, validación cruzada, precisión/*recall*/F1; regresión lineal y logística, kNN y árbol en sklearn |
+| 6 | [sem06_perceptron_mlp.ipynb](clases/sem06_perceptron_mlp.ipynb) | Del perceptrón a la red multicapa: la regla del perceptrón, XOR, propagación hacia adelante en papel y en matrices; sigmoide, tanh y ReLU; por qué importa la no linealidad |
 
 ## Tareas
 

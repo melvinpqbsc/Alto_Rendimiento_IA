@@ -548,8 +548,9 @@ class Tabla(Elemento):
                 d.rounded_rectangle((self.x, y, self.x + total, y + h), radius=10, fill=tinte(self.color, 0.8))
             x = self.x
             for celda, w, a in zip(fila, self.anchos, altos):
-                dibujar_texto(d, x + 20, y + (h - a) / 2, f"**{celda}**" if i == 0 else celda, self.tam, TINTA,
-                              self.color, w - 40)
+                # En el encabezado va en negrita todo lo que no es fórmula.
+                texto = "".join(p if p.startswith("$") else f"**{p}**" for p in re.split(r"(\$[^$]+\$)", celda) if p)
+                dibujar_texto(d, x + 20, y + (h - a) / 2, texto if i == 0 else celda, self.tam, TINTA, self.color, w - 40)
                 x += w
             y += h
             if i < len(self.filas) - 1:
@@ -1014,6 +1015,15 @@ def recorrer(escenas):
 # al audio: los subtítulos conservan la escritura original. Revisa los casos nuevos
 # transcribiendo el audio (ver CLAUDE.md, "Videos de las clases").
 PRONUNCIACION = {
+    "Rosenblatt": "Rósenblat",
+    "XOR": "équis or",
+    "NAND": "nand",
+    "NOR": "nor",
+    "AND": "and",
+    "OR": "or",
+    "MLP": "eme ele pe",
+    "tanh": "tansh",
+    "Tanh": "Tansh",
     "GitHub": "Guit-jab",
     "Git": "Guit",
     "git": "guit",
