@@ -21,3 +21,4 @@ El cronograma completo, con las fechas y lo que se entrega cada semana, está en
 | B1 | [B1_ejercicios_numpy.ipynb](tareas/B1_ejercicios_numpy.ipynb) | 3 |
 | B2 | [B2_descenso_gradiente.ipynb](tareas/B2_descenso_gradiente.ipynb) | 5 |
 | Sprint0 | [Sprint0_abandono_clientes.ipynb](tareas/Sprint0_abandono_clientes.ipynb) (datos en [`Sprint0_datos/`](tareas/Sprint0_datos/)) | 6 |
+| B3 | [B3_regresion_desde_cero.ipynb](tareas/B3_regresion_desde_cero.ipynb) | 7 |
