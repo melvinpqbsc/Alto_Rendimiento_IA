@@ -1096,6 +1096,9 @@ PRONUNCIACION = {
     "accuracy": "ákiurasi",
     "kNN": "ka ene ene",
     "stratify": "strátifai",
+    "backward": "bákuard",
+    "3Blue1Brown": "tri blu uan braun",
+    "Karpathy": "Karpazi",
 }
 
 
