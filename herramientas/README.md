@@ -1,6 +1,6 @@
 # Herramientas del profesor
 
-Cada estudiante tiene un repositorio **privado** de entregas en la organización [Alto-Rendimiento-IA](https://github.com/Alto-Rendimiento-IA): `entregas-<usuario>`. Allí guarda todos sus trabajos, una carpeta por trabajo (`B1/`, `P01/`, `Sprint1/`…). Estos scripts crean esos repositorios y copian su contenido a la hora de entrega. Solo usan la biblioteca estándar de Python (3.12 o más nuevo).
+Cada estudiante tiene un repositorio **privado** de entregas en la organización [Alto-Rendimiento-IA](https://github.com/Alto-Rendimiento-IA): `entregas-<usuario>`. Allí guarda todos sus trabajos, una carpeta por trabajo (`B1/`, `P1/`, `Sprint1/`…). Estos scripts crean esos repositorios y copian su contenido a la hora de entrega. Solo usan la biblioteca estándar de Python (3.12 o más nuevo).
 
 ## Configuración inicial (una vez)
 
@@ -61,10 +61,10 @@ python herramientas/crear_repos.py herramientas/parejas.csv --proyecto
 Al inicio de la clase en que vence un trabajo:
 
 ```bash
-python herramientas/recolectar_entregas.py herramientas/estudiantes.csv --trabajo P01 --nivel Intermedio
+python herramientas/recolectar_entregas.py herramientas/estudiantes.csv --trabajo P1 --nivel Intermedio
 ```
 
-Descarga cada repositorio tal como está en ese momento a `herramientas/recolecciones/<fecha_hora>_P01/<usuario>/` y escribe `registro.csv` con el commit, su fecha y si la carpeta `P01/` tiene un notebook. Esa copia es la entrega: lo que se suba después no cuenta, sin depender de las fechas de los commits (que se pueden alterar desde git).
+Descarga cada repositorio tal como está en ese momento a `herramientas/recolecciones/<fecha_hora>_P1/<usuario>/` y escribe `registro.csv` con el commit, su fecha y si la carpeta `P1/` tiene un notebook. Esa copia es la entrega: lo que se suba después no cuenta, sin depender de las fechas de los commits (que se pueden alterar desde git).
 
 ## Tabla de posiciones de un sprint
 

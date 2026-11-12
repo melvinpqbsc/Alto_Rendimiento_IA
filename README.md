@@ -46,7 +46,7 @@ Cada notebook de clase tiene arriba un botón **Abrir en Colab**. También puede
 ### Trabajos prácticos
 
 1. **Abre el enunciado** con su botón **Abrir en Colab**, en la carpeta `tareas/` de tu nivel.
-2. **Guárdalo en tu repositorio de entregas apenas empieces**: *Archivo → Guardar una copia en GitHub*, repositorio `Alto-Rendimiento-IA/entregas-<tu-usuario>`, rama `main`, y como ruta la carpeta del trabajo más el nombre del archivo: `P01/P01_autograd_desde_cero.ipynb`. Escribe un mensaje que diga qué hiciste ("ejercicio 3 resuelto").
+2. **Guárdalo en tu repositorio de entregas apenas empieces**: *Archivo → Guardar una copia en GitHub*, repositorio `Alto-Rendimiento-IA/entregas-<tu-usuario>`, rama `main`, y como ruta la carpeta del trabajo más el nombre del archivo: `P1/P1_autograd_desde_cero.ipynb`. Escribe un mensaje que diga qué hiciste ("ejercicio 3 resuelto").
 3. **Sigue trabajando desde tu copia**: de ahí en adelante ábrela con *Archivo → Abrir notebook → GitHub* (con **Incluir repositorios privados** marcado) y guarda con *Guardar una copia en GitHub* en la misma ruta. Cada guardado es un *commit*: guarda seguido.
 4. **Entrega.** No hay que enviar nada: al inicio de la clase el profesor copia todos los repositorios de entregas, y lo que esté en el tuyo en ese momento es tu entrega. Lo que subas después no cuenta.
 5. **Revisión entre compañeros.** Guarda también una copia en Drive (*Archivo → Guardar una copia en Drive*) y compártela con tu compañero revisor con permiso de comentar. Tu repositorio sigue siendo privado.

@@ -22,8 +22,8 @@ README_ENTREGAS = """# Entregas de {usuario}
 Repositorio privado: solo lo ven tú y el profesor.
 
 Guarda aquí cada trabajo en su propia carpeta, con el código del cronograma:
-`B1/`, `P01/`, `Sprint1/`, etc. Desde Colab: *Archivo → Guardar una copia en GitHub*,
-repositorio `{org}/{repo}`, rama `main`, ruta `P01/P01_nombre_del_notebook.ipynb`.
+`B1/`, `P1/`, `Sprint1/`, etc. Desde Colab: *Archivo → Guardar una copia en GitHub*,
+repositorio `{org}/{repo}`, rama `main`, ruta `P1/P1_nombre_del_notebook.ipynb`.
 
 Al inicio de cada clase el profesor copia este repositorio: lo que esté aquí en ese
 momento es tu entrega. Instrucciones completas en

@@ -283,7 +283,7 @@ ESCENAS = [
         ),
         Paso(
             "Para los trabajos, la ruta siempre es el código del trabajo, una barra, y el nombre del archivo. "
-            "La carpeta debe llamarse exactamente como el código, por ejemplo B1, P01 o Sprint1. "
+            "La carpeta debe llamarse exactamente como el código, por ejemplo B1, P1 o Sprint1. "
             "Así el profesor encuentra tu entrega.",
             Texto(130, 580, "Ruta de cada trabajo:", 40),
             Texto(560, 572, "`B1/B1_ejercicios_numpy.ipynb`", 52, acento=AZUL),

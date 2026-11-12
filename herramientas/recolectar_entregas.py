@@ -1,6 +1,6 @@
 """Copia el estado actual de todos los repositorios de entregas.
 
-    python herramientas/recolectar_entregas.py herramientas/estudiantes.csv --trabajo P01
+    python herramientas/recolectar_entregas.py herramientas/estudiantes.csv --trabajo P1
 
 Ejecutar al inicio de la clase: lo que se descarga en ese momento es la entrega.
 Guarda una copia de cada repositorio en herramientas/recolecciones/<fecha_hora>/<usuario>/
@@ -38,7 +38,7 @@ def descargar(repo, carpeta):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("csv", help="estudiantes.csv (usuario,nombre,nivel)")
-    parser.add_argument("--trabajo", help="código del trabajo (P01, B2, Sprint1…): revisa que su carpeta tenga un notebook")
+    parser.add_argument("--trabajo", help="código del trabajo (P1, B2, Sprint1…): revisa que su carpeta tenga un notebook")
     parser.add_argument("--nivel", help="solo estudiantes de este nivel (Inicial o Intermedio)")
     args = parser.parse_args()
 

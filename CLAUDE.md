@@ -20,7 +20,7 @@ Course repository for training high-school students toward IOAI 2027 (Singapore,
 ```
 Nivel_<Inicial|Intermedio>/
   clases/semNN_<tema>.ipynb        # NN = README week number, two digits: sem08_pytorch.ipynb
-  tareas/<codigo>_<tema>.ipynb     # codes from README: B0…B3, P01…P13, S1, Sprint0…Sprint3
+  tareas/<codigo>_<tema>.ipynb     # codes from README: B0…B3, P1…P13, S1, Sprint0…Sprint3
   soluciones/                      # reference solutions, gitignored, local only
   README.md                        # index: add a row for every notebook you create
 ```
@@ -88,6 +88,6 @@ Each class notebook gets a narrated explainer video (Spanish, Ecuadorian voice, 
 
 - The notebook is a **statement**, never a solution. It holds context and a goal, numbered tasks, `# TODO` cells, and `assert`-based check cells wherever correctness is checkable (shapes, values against a library reference such as micrograd vs `torch.autograd`, attention vs `nn.MultiheadAttention`).
 - Reference solutions go to `<nivel>/soluciones/` (gitignored). The repo is public, so a solution that gets committed has already leaked.
-- **Delivery.** The homework header tells students to save their copy right away to `Alto-Rendimiento-IA/entregas-<usuario>` at `<codigo>/<file name>` (e.g. `P01/P01_autograd_desde_cero.ipynb`) and to keep working from that copy. The snapshot script checks for a notebook in the `<codigo>/` folder, so the folder name must be exactly the README code.
+- **Delivery.** The homework header tells students to save their copy right away to `Alto-Rendimiento-IA/entregas-<usuario>` at `<codigo>/<file name>` (e.g. `P1/P1_autograd_desde_cero.ipynb`) and to keep working from that copy. The snapshot script checks for a notebook in the `<codigo>/` folder, so the folder name must be exactly the README code.
 - Peer review happens outside the private repos: students share a Drive copy of the notebook with their reviewer. Write the rubric cell so a reviewer can fill it in as a comment.
 - It ends with three fixed cells: **Conclusión** (the student's plain-language paragraph: what the numbers mean, what they'd try next; no paragraph, no grade), **Uso de IA** (one line: what they used AI for, if anything), and the **rubric**: runs / correct / justified / well communicated, 0–2 each, with space for the student's self-score.
