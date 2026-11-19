@@ -13,6 +13,7 @@ El cronograma completo, con las fechas y lo que se entrega cada semana, está en
 | 5 | [sem05_ml_clasico.ipynb](clases/sem05_ml_clasico.ipynb) | ML clásico en síntesis: entrenamiento/validación/prueba, sobreajuste y sesgo-varianza, validación cruzada, precisión/*recall*/F1; regresión lineal y logística, kNN y árbol en sklearn |
 | 6 | [sem06_perceptron_mlp.ipynb](clases/sem06_perceptron_mlp.ipynb) | Del perceptrón a la red multicapa: la regla del perceptrón, XOR, propagación hacia adelante en papel y en matrices; sigmoide, tanh y ReLU; por qué importa la no linealidad |
 | 7 | [sem07_backpropagation.ipynb](clases/sem07_backpropagation.ipynb) | Backpropagation: el grafo computacional, gradiente que llega × derivada local, la vuelta en papel por una red pequeña, las fórmulas con matrices, comprobación del gradiente y un MLP entrenado con nuestro propio gradiente |
+| 8 | [sem08_pytorch.ipynb](clases/sem08_pytorch.ipynb) | PyTorch: tensores, `autograd`, `nn.Module`, `Dataset` y `DataLoader`, el bucle de entrenamiento de cinco líneas; MNIST; CPU vs GPU |
 
 ## Tareas
 

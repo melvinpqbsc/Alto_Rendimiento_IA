@@ -1099,6 +1099,17 @@ PRONUNCIACION = {
     "backward": "bákuard",
     "3Blue1Brown": "tri blu uan braun",
     "Karpathy": "Karpazi",
+    "autograd": "áuto grad",
+    "Fashion-MNIST": "Fáshion ém-nist",
+    "MNIST": "ém-nist",
+    "DataLoader": "Déita Lóuder",
+    "torchvision": "torch visión",
+    "logits": "lóyits",
+    "CPU": "ce pe u",
+    "batch norm": "bach nórm",
+    "keepdim": "kip dim",
+    "Facebook": "Féisbuk",
+    "T4": "te cuatro",
 }
 
 
